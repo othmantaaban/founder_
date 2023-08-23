@@ -1,0 +1,7 @@
+{
+  "name": "charts",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

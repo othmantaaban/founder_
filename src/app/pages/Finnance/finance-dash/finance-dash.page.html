@@ -1,0 +1,16 @@
+
+<ion-header class="ion-no-border">
+  <app-date-segments 
+    [listPaths]="pathList" 
+    active="0"
+  ></app-date-segments>
+</ion-header>
+
+<!-- <app-finance-jour-dash></app-finance-jour-dash> -->
+<ion-content style="background-color: #F5F5F5;">
+  <!-- [ngSwitch]="active" -->
+  <!-- <app-finance-jour-dash  #jour *ngSwitchCase="'jour'"></app-finance-jour-dash>
+  <app-finance-mois-dash  #mois *ngSwitchCase="'mois'"></app-finance-mois-dash>
+  <app-finance-annee-dash #annes  *ngSwitchCase="'annee'"></app-finance-annee-dash> -->
+  <ion-router-outlet></ion-router-outlet>
+</ion-content>

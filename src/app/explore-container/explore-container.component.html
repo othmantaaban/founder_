@@ -1,0 +1,22 @@
+<div>
+  <app-cards-finance [items]="itemsEncaissement"></app-cards-finance>
+  <strong>{{ name }}</strong>
+
+    <div style="display: block" style="width:90%;margin:auto">
+      <canvas baseChart
+              [datasets]="barChartData"
+              [labels]="barChartLabels"
+              [options]="barChartOptions"
+              [legend]="barChartLegend"
+              [type]="barChartType">
+      </canvas>
+    </div>
+    <app-donut-chart></app-donut-chart>
+    <app-listing-finance [items]="annulationsList" [Title]="'Annulations'"></app-listing-finance>
+    <app-pie-chart></app-pie-chart>
+    <app-horizontal-bar-chart></app-horizontal-bar-chart>
+
+    <app-listing-administration [items]="absentsList" Title="Absents aujourd'hui"></app-listing-administration>
+
+    
+</div>

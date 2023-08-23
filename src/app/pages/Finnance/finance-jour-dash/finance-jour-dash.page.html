@@ -1,0 +1,152 @@
+<!-- <ion-header class="ion-no-border">
+  <app-date-segments [listPaths]="pathList" active="0"></app-date-segments>
+</ion-header> -->
+
+<ion-content>
+  <h6 style="text-align: center;margin-top: 20px;"><span style="font-weight: bold;">Suivi financier</span> > Vue
+    Journalière</h6>
+  <div>
+    <app-cards-finance [items]="itemsEncaissement">
+      
+    </app-cards-finance>
+
+    <ion-card style="padding:0;padding-top: 5px;padding-bottom: 5px;margin: 15px;margin-bottom:30px;width: 85%;"
+      class="text-center card-custom mx-auto">
+      <h6 style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;"><span
+          style="font-size: 0.9em ;">Encaissements par</span></h6>
+      <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist"
+        style="border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#enc-cycle"
+            type="button" role="tab" aria-controls="pills-home" aria-selected="true">Cycle</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#enc-type" type="button"
+            role="tab" aria-controls="pills-profile" aria-selected="false">Type</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#enc-service"
+            type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Service</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#enc-site"
+            type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Site</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="enc-cycle" role="tabpanel" aria-labelledby="pills-home-tab"
+          tabindex="0">
+          <!-- <h1>Home</h1> -->
+          <app-horizontal-bar-chart [barChartLabels]="encCycleLabels" [barChartData]="encCycleData"
+            [barChartLegend]="false"></app-horizontal-bar-chart>
+
+        </div>
+        <div class="tab-pane fade" id="enc-type" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+          <!-- <h1>profile</h1> -->
+          <app-horizontal-bar-chart [barChartLabels]="encTypeLabels" [barChartData]="encTypeData"
+            [barChartLegend]="false"></app-horizontal-bar-chart>
+        </div>
+        <div class="tab-pane fade" id="enc-service" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
+          <!-- <h1>contact</h1> -->
+          <app-horizontal-bar-chart [barChartLabels]="encServiceLabels" [barChartData]="encServiceData"
+            [barChartLegend]="false"></app-horizontal-bar-chart>
+        </div>
+        <div class="tab-pane fade" id="enc-site" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
+          <!-- <h1>contact</h1> -->
+          <app-horizontal-bar-chart [barChartLabels]="encSiteLabels" [barChartData]="encSiteData"
+            [barChartLegend]="false"></app-horizontal-bar-chart>
+        </div>
+      </div>
+    </ion-card>
+
+    <!-- <ion-card style="padding:0;padding-top: 5px;padding-bottom: 5px;margin: 15px;margin-bottom:30px;width: 85%;" class="text-center card-custom mx-auto">
+        <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;"><span style="font-size: 0.9em ;">Retards par</span></h6>
+        <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist" style="border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ret-cycle" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Cycle</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#ret-niveau" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Niveau</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#ret-service" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Service</button>
+          </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="ret-cycle" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+          <app-horizontal-bar-chart [barChartLabels]="encCycleLabels" [barChartData]="encCycleData" [barChartLegend]="false"></app-horizontal-bar-chart>
+          </div>
+          <div class="tab-pane fade" id="ret-niveau" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+          <app-horizontal-bar-chart [barChartLabels]="encTypeLabels" [barChartData]="encTypeData" [barChartLegend]="false" ></app-horizontal-bar-chart>
+          </div>
+          <div class="tab-pane fade" id="ret-service" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
+          <app-horizontal-bar-chart [barChartLabels]="encServiceLabels" [barChartData]="encServiceData" [barChartLegend]="false"></app-horizontal-bar-chart>
+          </div>
+        </div>
+      </ion-card> -->
+
+    <ion-card class="mx-auto"
+      style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
+      <app-listing-recouvrements [items]="recouvrementsList" [Title]="'Recouvrements'"></app-listing-recouvrements>
+    </ion-card>
+
+    <ion-card class="mx-auto"
+      style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
+      <app-listing-finance-avoirs [items]="avoirsList" [Title]="'Avoirs générés'"></app-listing-finance-avoirs>
+    </ion-card>
+
+    <ion-card class="mx-auto"
+      style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
+      <app-listing-discount [items]="discountsList" [Title]="'Remises Accordées'"></app-listing-discount>
+    </ion-card>
+
+
+    <ion-card class="mx-auto"
+      style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
+      <app-listing-finance [items]="annulationsList" [Title]="'Paiements Annulés'"></app-listing-finance>
+    </ion-card>
+
+
+    <app-cards-finance [items]="itemsAnnulations"></app-cards-finance>
+
+
+    <ion-slides style="margin-bottom: 10px;" pager="true" [options]="slideOpts">
+      <ion-slide>
+        <ion-card style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
+          <h6 style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;"><span
+              style="font-size: 0.9em ;">Dépenses par Catégorie</span></h6>
+          <!-- <app-donut-chart [doughnutChartLabels]="depCategorieLabels" [doughnutChartData]="depCategorieData"></app-donut-chart> -->
+          <app-horizontal-bar-chart [barChartLabels]="depCategorieLabels" [barChartData]="depCategorieData"
+            [barChartLegend]="false"></app-horizontal-bar-chart>
+        </ion-card>
+      </ion-slide>
+
+    </ion-slides>
+
+
+    <!-- <div style="width: 90%;margin:auto">
+      <app-listing-finance [items]="annulationsList" [Title]="'Avoirs'"></app-listing-finance>
+    </div>  -->
+    <ion-card class="mx-auto"
+      style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
+      <app-listing-finance-depense [items]="depensesLst" [Title]="'Dépenses du jour'"></app-listing-finance-depense>
+    </ion-card>
+
+
+
+
+
+
+    <!-- <app-donut-chart></app-donut-chart> -->
+    <!-- <app-listing-finance [items]="annulationsList" [Title]="'Annulations'"></app-listing-finance> -->
+    <!-- <app-pie-chart></app-pie-chart>
+      <app-horizontal-bar-chart></app-horizontal-bar-chart> -->
+
+    <!-- <ion-card style="padding-top: 0px;padding-bottom: 10px;margin: auto;margin-bottom:30px;width: 90%;" class="card-custom"> -->
+    <!-- <app-listing-administration [items]="absentsList" Title="Absents aujourd'hui"></app-listing-administration> -->
+    <!-- </ion-card> -->
+
+    <!-- <app-tab-solution></app-tab-solution> -->
+
+  </div>
+</ion-content>
