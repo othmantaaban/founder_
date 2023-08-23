@@ -12,6 +12,11 @@ const routes: Routes = [
         path: 'jour',
         loadChildren: () => import('../usage-jour-dash/usage-jour-dash.module').then( m => m.UsageJourDashPageModule)
       },
+      {
+        path: '',
+        redirectTo: 'jour',
+        pathMatch: 'full'
+      }
     ]
   }
 ];

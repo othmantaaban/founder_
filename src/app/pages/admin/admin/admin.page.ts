@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -17,24 +18,28 @@ export class AdminPage implements OnInit {
   active 
   constructor(
     private sharedService: SharedService,
-    private navigation : NavController
+    private navigation : NavController,
+    private route : Router,
     ) {
       this.sharedService.getClickEvent().subscribe((x)=>{
-        this.active = x !== null ? x : this.active;
-        console.log(this.active);
-          switch (this.active) {
-            case 'jour':
-              navigation.navigateRoot("tabs/admin/jour")
-              break;
-            case 'mois':
-              navigation.navigateRoot("tabs/admin/mois")
-              break;
-            case 'annee':
-              navigation.navigateRoot("tabs/admin/annee")
-              break;
-            default:
-              break;
-          }
+        let checkIsActive = route.isActive("tabs/finance-dash/jour", true) || route.isActive("tabs/finance-dash/mois", true) || route.isActive("tabs/finance-dash/annee", true)
+        
+        if(checkIsActive) {
+          console.log(this.active);
+            switch (this.active) {
+              case 'jour':
+                navigation.navigateRoot("tabs/admin/jour")
+                break;
+              case 'mois':
+                navigation.navigateRoot("tabs/admin/mois")
+                break;
+              case 'annee':
+                navigation.navigateRoot("tabs/admin/annee")
+                break;
+              default:
+                break;
+            }
+        }
         // console.log(this.moisRef);
         // console.log(this.anneeRef);
     });

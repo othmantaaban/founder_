@@ -7,6 +7,7 @@ import { FinanceService } from 'src/app/finance.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { FinanceJourDashPage } from '../finance-jour-dash/finance-jour-dash.page';
 import { FinanceJourDashPageModule } from '../finance-jour-dash/finance-jour-dash.module';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-finance-dash',
@@ -28,24 +29,29 @@ export class FinanceDashPage implements OnInit {
 // : ComponentRef
   constructor(
     private sharedService: SharedService,
-    private navigation : NavController
+    private navigation : NavController,
+    private route : Router
     ) {
       this.sharedService.getClickEvent().subscribe((x)=>{
-        this.active = x !== null ? x : this.active;
-        console.log(this.active);
-          switch (this.active) {
-            case 'jour':
-              navigation.navigateRoot("tabs/finance-dash/jour")
-              break;
-            case 'mois':
-              navigation.navigateRoot("tabs/finance-dash/mois")
-              break;
-            case 'annee':
-              navigation.navigateRoot("tabs/finance-dash/annee")
-              break;
-            default:
-              break;
-          }
+        let checkIsActive = route.isActive("tabs/finance-dash/jour", true) || route.isActive("tabs/finance-dash/mois", true) || route.isActive("tabs/finance-dash/annee", true)
+        
+        if(checkIsActive) {
+          this.active = x !== null ? x : this.active;
+          console.log(this.active);
+            switch (this.active) {
+              case 'jour':
+                navigation.navigateRoot("tabs/finance-dash/jour")
+                break;
+              case 'mois':
+                navigation.navigateRoot("tabs/finance-dash/mois")
+                break;
+              case 'annee':
+                navigation.navigateRoot("tabs/finance-dash/annee")
+                break;
+              default:
+                break;
+            }
+        }
         // console.log(this.moisRef);
         // console.log(this.anneeRef);
     });
@@ -58,6 +64,9 @@ export class FinanceDashPage implements OnInit {
   ionViewWillEnter() {
     // this.jourRef.callApi();
   }
+
+
+  
 
 }
 

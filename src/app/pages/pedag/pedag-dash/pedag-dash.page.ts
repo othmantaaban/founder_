@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -18,22 +19,26 @@ export class PedagDashPage implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private navigation : NavController
+    private navigation : NavController,
+    private route : Router
     ) {
       this.sharedService.getClickEvent().subscribe((x)=>{
-        this.active = x !== null ? x : this.active;
-        console.log(this.active);
-          switch (this.active) {
-            case 'jour':
-              navigation.navigateRoot("tabs/pedag-dash/jour")
-              break;
-            case 'mois':
-              navigation.navigateRoot("tabs/pedag-dash/mois")
-              break;
-            default:
-              break;
-          }
-
+        let checkIsActive = route.isActive("tabs/finance-dash/jour", true) || route.isActive("tabs/finance-dash/mois", true);
+        
+        if(checkIsActive) {
+          this.active = x !== null ? x : this.active;
+          console.log(this.active);
+            switch (this.active) {
+              case 'jour':
+                navigation.navigateRoot("tabs/pedag-dash/jour")
+                break;
+              case 'mois':
+                navigation.navigateRoot("tabs/pedag-dash/mois")
+                break;
+              default:
+                break;
+            }
+        }
     });
   }
   ngOnInit() {

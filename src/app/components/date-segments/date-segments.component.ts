@@ -73,112 +73,12 @@ export class DateSegmentsComponent implements OnInit {
    this.sharedService.sendClickEvent(this.selectedValue);
   }
 
-  // callApi(date){
-  //   // this.itemsList[this.selectedIndex]
-  //   // DateSegmentsComponent.itemsEncaissement=[]
-  //   // this.financeService.getEncaissementCardsList("2022-05-13").subscribe(response => {
-  //   //   const data=response
-  //   //   // Cycle prep
-  //   //   data.map((c,index)=>{
-  //   //     DateSegmentsComponent.itemsEncaissement.push({alias:"élèves",title:c.title,montant:this.numFormatter(parseInt(c.result[0].Montant)),count:c.result[0].nbEleves,unite:"MAD"})
-  //   //   })
-
-  //   // })
-
-  //   // this.financeService.getEncaissementList("2022-05-13").subscribe(response => {
-  //   //   const data=response.result
-  //   //   // Cycle prep
-  //   //   let dataCycle=data.map((d) => ({Cycle:d.Cycle,Montant:d.Montant}));
-  //   //   let tmpTable = this.groupArrayOfObjects(
-  //   //     dataCycle,
-  //   //     "Cycle"
-  //   //   );
-  //   //   const dictCycle = [];
-  //   //   for (const [key1, value1] of Object.entries(tmpTable)) {
-  //   //     let total=0
-  //   //     // console.log("here: ",Object.keys(value1).length)
-  //   //     Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-  //   //     dictCycle.push({
-  //   //       Cycle: key1,
-  //   //       total: total,
-  //   //     });
-  //   //     total=0
-  //   //   }
-  //   //   let tmpData=[]
-  //   //   let tmpLabels=[]
-  //   //   dictCycle.map((d)=>{
-  //   //     tmpLabels.push(d.Cycle)
-  //   //     tmpData.push(d.total)
-  //   //   })
-  //   //   DateSegmentsComponent.encCycleData.labels=tmpLabels
-  //   //   DateSegmentsComponent.encCycleData.datasets[0]["data"]=tmpData
-
-  //   //   // Service prep
-  //   //   let dataService=data.map((d) => ({Service:d.Service,Montant:d.Montant}));
-  //   //   tmpTable = this.groupArrayOfObjects(
-  //   //     dataService,
-  //   //     "Service"
-  //   //   );
-  //   //   // console.log("here: ",dataService)
-  //   //   const dictService = [];
-  //   //   for (const [key1, value1] of Object.entries(tmpTable)) {
-  //   //     let total=0
-  //   //     // console.log("here: ",Object.keys(value1))
-  //   //     Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-  //   //     dictService.push({
-  //   //       Service: key1,
-  //   //       total: total,
-  //   //     });
-  //   //     total=0
-  //   //   }
-  //   //   // console.log("here: ",dictService)
-  //   //   tmpData=[]
-  //   //   tmpLabels=[]
-  //   //   dictService.map((d)=>{
-  //   //     tmpLabels.push(d.Service)
-  //   //     tmpData.push(d.total)
-  //   //   })
-  //   //   DateSegmentsComponent.encServiceData.labels=tmpLabels
-  //   //   DateSegmentsComponent.encServiceData.datasets[0]["data"]=tmpData
-  //   //   // console.log("here: ",this.encServiceData)
-
-
-  //   //   // Type prep
-  //   //   let dataType=data.map((d) => ({Type:d.PaiementMode,Montant:d.Montant}));
-  //   //   const tmpTable2 = this.groupArrayOfObjects(
-  //   //     dataType,
-  //   //     "Type"
-  //   //   );
-  //   //   const dictType = [];
-  //   //   for (const [key1, value1] of Object.entries(tmpTable2)) {
-  //   //     let total=0
-  //   //     Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-  //   //     dictType.push({
-  //   //       Type: key1,
-  //   //       total: total,
-  //   //     });
-  //   //     total=0
-  //   //   }
-  //   //   tmpData=[]
-  //   //   tmpLabels=[]
-  //   //   dictType.map((d)=>{
-  //   //     tmpLabels.push(d.Type)
-  //   //     tmpData.push(d.total)
-  //   //   })
-  //   //   DateSegmentsComponent.encTypeData.labels=tmpLabels
-  //   //   DateSegmentsComponent.encTypeData.datasets[0]["data"]=tmpData
-  //   //   // console.log(this.encTypeData)
-  //   // })
-  // }
-
-     // Group By Function
-     
-     groupArrayOfObjects = (list, key) => {
-      return list.reduce(function (rv, x) {
-        (rv[x[key]] = rv[x[key]] || []).push(x);
-        return rv;
-      }, {});
-    };
+  groupArrayOfObjects = (list, key) => {
+    return list.reduce(function (rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  };
 
 
   onDisplay(item: any){
@@ -238,9 +138,9 @@ export class DateSegmentsComponent implements OnInit {
     return TotalDays;
 }
 
-get getStaticDate() {
-  return GlobalConstantesComponent.dateValue;
-}
+  get getStaticDate() {
+    return GlobalConstantesComponent.dateValue;
+  }
 
   ngOnInit() {
     this.selectedValue = this.router.getCurrentNavigation().finalUrl.toString().split("/").pop()
