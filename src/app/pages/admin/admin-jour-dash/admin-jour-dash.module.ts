@@ -18,12 +18,10 @@ import { HttpClientModule } from '@angular/common/http';
 // import { CardsAdminComponent } from 'src/app/components/cards-admin/cards-admin.component';
 // import { HorizontalBarChartComponent } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component';
 // import { ListingAdminComponent } from 'src/app/components/listing-admin/listing-admin.component';
-import { ParentModule } from 'src/app/parent/parent.module';
 import { CardsAdminComponent } from 'src/app/components/cards-admin/cards-admin.component';
-import { ListingAdminComponent } from 'src/app/components/listing-admin/listing-admin.component';
 import { ListingAdministrationComponent } from 'src/app/components/listing-administration/listing-administration.component';
 import { ListingAdmin2Component } from 'src/app/components/listing-admin2/listing-admin2.component';
-import { HorizontalBarChartComponent } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component';
+import { HorizontalBarChartComponentModule } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component.module';
 
 
 @NgModule({
@@ -35,13 +33,13 @@ import { HorizontalBarChartComponent } from 'src/app/components/horizontal-bar-c
     NgChartsModule,
     ScrollingModule,
     HttpClientModule,
+    HorizontalBarChartComponentModule
   ],
   declarations: [
     AdminJourDashPage,
     CardsAdminComponent,
     ListingAdministrationComponent,
     ListingAdmin2Component,
-    HorizontalBarChartComponent
   ]
 })
 export class AdminJourDashPageModule {}

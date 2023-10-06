@@ -29,4 +29,9 @@ export class TabsPage {
     return this.navController.navigateRoot(['/tabs/suivi-inscription']);
   }
 
+  tabWillChange(ev) {
+    console.log(ev);
+    
+  }
+
 }

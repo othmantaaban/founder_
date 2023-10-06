@@ -18,7 +18,7 @@ import { FinanceAnneeDashPage } from '../finance-annee-dash/finance-annee-dash.p
 import { FinanceMoisDashPage } from '../finance-mois-dash/finance-mois-dash.page';
 import { CardsFinanceComponent } from '../../../components/cards-finance/cards-finance.component';
 import { ComboChartComponent } from '../../../components/combo-chart/combo-chart.component';
-import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
+import { DateSegmentsComponentModule } from 'src/app/components/date-segments/date-segment.component.module';
 
 @NgModule({
   imports: [
@@ -29,12 +29,13 @@ import { DateSegmentsComponent } from 'src/app/components/date-segments/date-seg
     NgChartsModule,
     ScrollingModule,
     HttpClientModule,
+    DateSegmentsComponentModule
     // NgChartsModule
     // ParentModule
   ],
   declarations: [
     FinanceDashPage,
-    DateSegmentsComponent
+    // DateSegmentsComponent
 
     // FinanceJourDashPage,
     // FinanceMoisDashPage,

@@ -8,17 +8,19 @@ import { AdminPageRoutingModule } from './admin-routing.module';
 
 import { AdminPage } from './admin.page';
 import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
+import { DateSegmentsComponentModule } from 'src/app/components/date-segments/date-segment.component.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AdminPageRoutingModule
+    AdminPageRoutingModule,
+    DateSegmentsComponentModule
   ],
   declarations: [
     AdminPage,
-    DateSegmentsComponent
+    // DateSegmentsComponent
   ]
 })
 export class AdminPageModule {}

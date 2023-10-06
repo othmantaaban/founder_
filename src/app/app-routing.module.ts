@@ -12,7 +12,7 @@ const routes: Routes = [
   },
   {
     path: 'tabs',
-    canActivate: [SchoolGuardService,AuthGuardService],
+    // canActivate: [SchoolGuardService,AuthGuardService],
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
@@ -36,7 +36,8 @@ const routes: Routes = [
   {
     path: 'finance-dash',
     loadChildren: () => import('./pages/Finnance/finance-dash/finance-dash.module').then( m => m.FinanceDashPageModule)
-  },  {
+  },
+  {
     path: 'admin',
     loadChildren: () => import('./pages/admin/admin/admin.module').then( m => m.AdminPageModule)
   },

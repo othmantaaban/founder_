@@ -11,8 +11,8 @@ import { DateSegmentsComponent } from 'src/app/components/date-segments/date-seg
 import { SuiviInscriptionPage } from './suivi-inscription.page';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { PieChartComponentModule } from 'src/app/components/pie-chart/pie-chart.component.module';
-import { HorizontalBarChartComponent } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component';
 import { NgChartsModule } from 'ng2-charts';
+import { HorizontalBarChartComponentModule } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component.module';
 
 @NgModule({
   imports: [
@@ -22,8 +22,12 @@ import { NgChartsModule } from 'ng2-charts';
     SuiviInscriptionPageRoutingModule,
     NgApexchartsModule,
     PieChartComponentModule,
-    NgChartsModule
+    NgChartsModule,
+    HorizontalBarChartComponentModule
   ],
-  declarations: [SuiviInscriptionPage,DateSegmentsComponent,HorizontalBarChartComponent]
+  declarations: [
+    SuiviInscriptionPage,
+    // HorizontalBarChartComponent
+  ]
 })
 export class SuiviInscriptionPageModule {}

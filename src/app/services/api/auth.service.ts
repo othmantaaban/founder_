@@ -6,6 +6,7 @@ import { ApiService } from './api.service';
 import { Storage } from '@ionic/storage';
 import { NavController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,8 @@ export class AuthService {
     public router: Router,
     public navController: NavController,
     private storage: Storage,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private http : HttpClient
   ) {
    }
 
@@ -55,7 +57,9 @@ export class AuthService {
         this.api.get({
           user: user,
           token: token
-        }, 'checkUser').subscribe(async(res)=>{
+        }, 'checkUser')
+        .subscribe(async(res)=>{
+          // @ts-ignore
             if(res && res.valid){
               resolve(true);
             }else{

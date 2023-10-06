@@ -14,8 +14,8 @@ import { DonutChartComponent } from 'src/app/components/donut-chart/donut-chart.
 import { StackedBarChartComponent } from 'src/app/components/stacked-bar-chart/stacked-bar-chart.component';
 import { ParentModule } from 'src/app/parent/parent.module';
 import { CardsPedgComponent } from 'src/app/components/cards-pedg/cards-pedg.component';
-import { HorizontalBarChartComponent } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component';
 import { CardsPedagv2Component } from 'src/app/components/cards-pedagv2/cards-pedagv2.component';
+import { HorizontalBarChartComponentModule } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component.module';
 
 @NgModule({
   imports: [
@@ -24,11 +24,11 @@ import { CardsPedagv2Component } from 'src/app/components/cards-pedagv2/cards-pe
     IonicModule,
     PedagMoisDashPageRoutingModule,
     NgChartsModule,
+    HorizontalBarChartComponentModule,
   ],
   declarations: [
     PedagMoisDashPage,
     CardsPedgComponent,
-    HorizontalBarChartComponent,
     CardsPedagv2Component
   ]
 })

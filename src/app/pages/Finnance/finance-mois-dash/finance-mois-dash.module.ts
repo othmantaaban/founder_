@@ -18,6 +18,7 @@ import { ListingFinanceDepenseComponent } from 'src/app/components/listing-finan
 import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientModule } from '@angular/common/http';
+import { HorizontalBarChartComponentModule } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { HttpClientModule } from '@angular/common/http';
     FinanceMoisDashPageRoutingModule,
     NgChartsModule,
     ScrollingModule,
-    HttpClientModule
+    HttpClientModule,
+    HorizontalBarChartComponentModule
   ],
   declarations: [
     FinanceMoisDashPage,
@@ -35,7 +37,7 @@ import { HttpClientModule } from '@angular/common/http';
     CardsFinanceComponent,
     ListingFinanceComponent,
     PieChartComponent,
-    HorizontalBarChartComponent,
+    // HorizontalBarChartComponent,
     ListingAdministrationComponent,
     ListingFinanceDepenseComponent,
     // DateSegmentsComponent

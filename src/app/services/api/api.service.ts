@@ -39,8 +39,9 @@ export class ApiService {
     };
 
     return this.http
+    //     
+    // .get("http://localhost/boti_campus/founder_dev/" + url, optionRequete);
     .get('https://boti.education/' + this.alias + '/founder_dev/' + url, optionRequete);
-      // .get('http://localhost/boti/apiFounder/' + url, optionRequete);
 
 
   }
@@ -54,6 +55,8 @@ export class ApiService {
     });
     return this.http
     .post('https://boti.education/' + this.alias + '/founder_dev/' + url, data);
+    // .post("http://localhost/boti_campus/founder_dev/" + url, data);
+
     // .post('http://localhost/boti/apiFounder/' + url, data);
   }
 

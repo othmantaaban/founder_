@@ -112,7 +112,6 @@ export class UsageJourDashPage implements OnInit {
 
     this.usageService.getConnexions(date).subscribe(response => {
       const data = response.result
-      console.log('get connexions');
 
       // ! ------------------- GET CONNXIONS OF ROLE PARENT AND COUNT THE COUNT OF EACH DAY 
       // Parents prep

@@ -1,5 +1,5 @@
 <ion-tabs>
-  <ion-tab-bar slot="bottom">
+  <ion-tab-bar slot="bottom" (ionTabsWillChange)="tabWillChange($event)" (ionTabsDidChange)="tabWillChange($event)">
     <ion-tab-button tab="finance-dash" style="background:transparent">
       <ion-icon style="font-size: 24px;" name="card"></ion-icon>
       Finance

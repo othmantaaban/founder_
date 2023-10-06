@@ -83,8 +83,12 @@ export class FinanceAnneeDashPage implements OnInit {
   constructor(
     private financeService : FinanceService,private sharedService:SharedService
   ) {
-    this.clickEventSubscription= this.sharedService.getClickEvent().subscribe(()=>{
-      this.callApi();
+    this.clickEventSubscription= this.sharedService.getClickEvent().subscribe((elt)=>{
+      console.log(elt);
+      
+      if(elt.value == "annee") { 
+        this.callApi();
+      }
     })
    }
 
@@ -94,51 +98,45 @@ export class FinanceAnneeDashPage implements OnInit {
     let date=DateSegmentsComponent.dateValue !== undefined ? DateSegmentsComponent.dateValue : new Date().getFullYear() + 1 
     console.log(date);
     
-    this.financeService.getEncaissementsAnnuelList(date).subscribe(response => {
+    this.financeService.getEncaissementsAnnuelList(date)
+    .subscribe(response => {
       const data=response.result.slice(0,8)
-      let dataEnc=data.map((d) => ({Mois:d.Month,Montant:d.Montant}));
-      let tmpTable = this.groupArrayOfObjects(
-        dataEnc,
-        "Mois"
-      );
-      
-      const dictEnc = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total=0
-        // console.log("here: ",Object.keys(value1).length)
-        Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-        dictEnc.push({
-          Mois: key1,
-          total: total,
-        });
-        total=0
-      }
-      let tmpData=[]
-      let tmpLabels=[]
-      dictEnc.map((d)=>{
-        tmpLabels.push(d.Mois)
-        tmpData.push(d.total)
-      })
-      this.barChartLabels1=tmpLabels
-      this.barChartData1[1].data=tmpData
-      this.barChartData2[1].data=tmpData
-      this.barChartLabels2=tmpLabels
-      console.log("data 2:",this.barChartData2)
+      let labels = []
+      let datas = []
+      let lastIndex = 0
+      data.forEach(element => {
+        let index = labels.indexOf(element.Month)
 
-      // Encaissement cumulé
-      this.barChartData3[1].data=tmpData
-      this.barChartLabels3=tmpLabels
-      let prev=0
-      for(let i=0;i<this.barChartData3[1].data.length;i++){
-        this.barChartData3[0].data.push(this.barChartData3[1].data[i]+prev)
-        // console.log(this.barChartData3[1].data[i]+prev)
-        prev=this.barChartData3[1].data[i]+prev
-      }
-      
+        if(index == -1) {
+          labels.push(element.Month)
+          datas.push(0)
+          lastIndex = datas.length - 1
+        }
+
+        datas[index != -1 ? index: lastIndex] += element.Montant
+      });
+
+      this.barChartLabels1 = labels
+      this.barChartLabels2 = labels
+      this.barChartLabels3 = labels
+      this.barChartData1[1].data= datas
+      this.barChartData2[1].data= datas
+      this.barChartData3[1].data= datas
+      this.barChartData3[1].data.reduce((prev, current) => {
+        this.barChartData3[0].data.push(+current + +prev)
+        return +current + +prev
+      }, 0)
     })
 
-    this.financeService.getCAList(date).subscribe(response => {
-      const data=response.result
+    this.financeService.getCAList(date)
+    .subscribe(response => {
+      const data = response.result
+      console.log(data);
+      
+      data.forEach(element => {
+        
+      });
+
       // Cycle prep
       let dataEnc=data.map((d) => ({Mois:d.Month,Montant:d.Montant}));
       let tmpTable = this.groupArrayOfObjects(
@@ -168,39 +166,44 @@ export class FinanceAnneeDashPage implements OnInit {
 
     this.financeService.getRetardsAnnuelList(date).subscribe(response => {
       const data=response.result
-      // Cycle prep
-      let dataEnc=data.map((d) => ({Mois:d.Month,Montant:d.Montant}));
-      let tmpTable = this.groupArrayOfObjects(
-        dataEnc,
-        "Mois"
-      );
-      const dictEnc = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total=0
-        // console.log("here: ",Object.keys(value1).length)
-        Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-        dictEnc.push({
-          Mois: key1,
-          total: total,
-        });
-        total=0
-      }
-      let tmpData=[]
-      let tmpLabels=[]
-      dictEnc.map((d)=>{
-        tmpLabels.push(d.Mois)
-        tmpData.push(d.total)
-      })
-      this.barChartData1[2].data=tmpData
-      // Encaissement cumulé
-      this.barChartData4[1].data=tmpData
-      this.barChartLabels4=tmpLabels
-      let prev=0
-      for(let i=0;i<this.barChartData4[1].data.length;i++){
-        this.barChartData4[0].data.push(this.barChartData4[1].data[i]+prev)
-        prev=this.barChartData4[1].data[i]+prev
-        // console.log(prev)
-      }
+
+      data.forEach(element => {
+            
+      });
+
+      // // Cycle prep
+      // let dataEnc=data.map((d) => ({Mois:d.Month,Montant:d.Montant}));
+      // let tmpTable = this.groupArrayOfObjects(
+      //   dataEnc,
+      //   "Mois"
+      // );
+      // const dictEnc = [];
+      // for (const [key1, value1] of Object.entries(tmpTable)) {
+      //   let total=0
+      //   // console.log("here: ",Object.keys(value1).length)
+      //   Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
+      //   dictEnc.push({
+      //     Mois: key1,
+      //     total: total,
+      //   });
+      //   total=0
+      // }
+      // let tmpData=[]
+      // let tmpLabels=[]
+      // dictEnc.map((d)=>{
+      //   tmpLabels.push(d.Mois)
+      //   tmpData.push(d.total)
+      // })
+      // this.barChartData1[2].data=tmpData
+      // // Encaissement cumulé
+      // this.barChartData4[1].data=tmpData
+      // this.barChartLabels4=tmpLabels
+      // let prev=0
+      // for(let i=0;i<this.barChartData4[1].data.length;i++){
+      //   this.barChartData4[0].data.push(this.barChartData4[1].data[i]+prev)
+      //   prev=this.barChartData4[1].data[i]+prev
+      //   // console.log(prev)
+      // }
     })
 
     this.financeService.getDepensesAnnuelList(date).subscribe(response => {
@@ -239,172 +242,25 @@ export class FinanceAnneeDashPage implements OnInit {
       // console.log(this.barChartData2[0].data)
     })
 
-    this.financeService.getEncaissementCardsAnneeList(date).subscribe(response => {
-          const data=response
-          console.log("cards data: ",data)
-          // Cycle prep
-          this.itemsEncaissement=[] //vider la liste
-          data.map((c,index)=>{
-            if(c.result.length!=0){
-              // console.log(c.result[0])
-              this.itemsEncaissement.push({alias:"élèves",title:c.title,montant:this.numFormatter(parseInt(c.result[0].Montant)),count:c.result[0].nbEleves,unite:"MAD"})
-            }
-          })
-         // console.log("cards data: ",this.itemsEncaissement)
-    });
+    // this.financeService.getEncaissementCardsAnneeList(date).subscribe(response => {
+    //       const data=response
+    //       console.log("cards data: ",data)
+    //       // Cycle prep
+    //       this.itemsEncaissement=[] //vider la liste
+    //       data.map((c,index)=>{
+    //         if(c.result.length!=0){
+    //           // console.log(c.result[0])
+    //           this.itemsEncaissement.push({alias:"élèves",title:c.title,montant:this.numFormatter(parseInt(c.result[0].Montant)),count:c.result[0].nbEleves,unite:"MAD"})
+    //         }
+    //       })
+    //      // console.log("cards data: ",this.itemsEncaissement)
+    // });
 
   }
 
   ngOnInit() {
     this.callApi()
-    // this.clickEventSubscription= this.sharedService.getClickEvent().subscribe(()=>{
-    //   this.callApi();
-    // })
 
-    // this.financeService.getEncaissementsAnnuelList("").subscribe(response => {
-    //   const data=response.result.slice(0,8)
-    //   // Cycle prep
-    //   let dataEnc=data.map((d) => ({Mois:d.Month,Montant:d.Montant}));
-    //   let tmpTable = this.groupArrayOfObjects(
-    //     dataEnc,
-    //     "Mois"
-    //   );
-      
-    //   const dictEnc = [];
-    //   for (const [key1, value1] of Object.entries(tmpTable)) {
-    //     let total=0
-    //     // console.log("here: ",Object.keys(value1).length)
-    //     Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-    //     dictEnc.push({
-    //       Mois: key1,
-    //       total: total,
-    //     });
-    //     total=0
-    //   }
-    //   let tmpData=[]
-    //   let tmpLabels=[]
-    //   dictEnc.map((d)=>{
-    //     tmpLabels.push(d.Mois)
-    //     tmpData.push(d.total)
-    //   })
-    //   this.barChartLabels1=tmpLabels
-    //   this.barChartData1[1].data=tmpData
-    //   this.barChartData2[1].data=tmpData.slice(0,2)
-
-    //   // Encaissement cumulé
-    //   this.barChartData3[1].data=tmpData
-    //   this.barChartLabels3=tmpLabels
-    //   let prev=0
-    //   for(let i=0;i<this.barChartData3[1].data.length;i++){
-    //     this.barChartData3[0].data.push(this.barChartData3[1].data[i]+prev)
-    //     // console.log(this.barChartData3[1].data[i]+prev)
-    //     prev=this.barChartData3[1].data[i]+prev
-    //   }
-      
-    // })
-
-    // this.financeService.getCAList("").subscribe(response => {
-    //   const data=response.result
-    //   // Cycle prep
-    //   let dataEnc=data.map((d) => ({Mois:d.Month,Montant:d.Montant}));
-    //   let tmpTable = this.groupArrayOfObjects(
-    //     dataEnc,
-    //     "Mois"
-    //   );
-    //   // console.log(dataEnc)
-    //   const dictEnc = [];
-    //   for (const [key1, value1] of Object.entries(tmpTable)) {
-    //     let total=0
-    //     // console.log("here: ",Object.keys(value1).length)
-    //     Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-    //     dictEnc.push({
-    //       Mois: key1,
-    //       total: total,
-    //     });
-    //     total=0
-    //   }
-    //   let tmpData=[]
-    //   let tmpLabels=[]
-    //   dictEnc.map((d)=>{
-    //     tmpLabels.push(d.Mois)
-    //     tmpData.push(d.total)
-    //   })
-    //   this.barChartData1[0].data=tmpData
-    // })
-
-    // this.financeService.getRetardsAnnuelList("").subscribe(response => {
-    //   const data=response.result
-    //   // Cycle prep
-    //   let dataEnc=data.map((d) => ({Mois:d.Month,Montant:d.Montant}));
-    //   let tmpTable = this.groupArrayOfObjects(
-    //     dataEnc,
-    //     "Mois"
-    //   );
-    //   const dictEnc = [];
-    //   for (const [key1, value1] of Object.entries(tmpTable)) {
-    //     let total=0
-    //     // console.log("here: ",Object.keys(value1).length)
-    //     Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-    //     dictEnc.push({
-    //       Mois: key1,
-    //       total: total,
-    //     });
-    //     total=0
-    //   }
-    //   let tmpData=[]
-    //   let tmpLabels=[]
-    //   dictEnc.map((d)=>{
-    //     tmpLabels.push(d.Mois)
-    //     tmpData.push(d.total)
-    //   })
-    //   this.barChartData1[2].data=tmpData
-    //   // Encaissement cumulé
-    //   this.barChartData4[1].data=tmpData
-    //   this.barChartLabels4=tmpLabels
-    //   let prev=0
-    //   for(let i=0;i<this.barChartData4[1].data.length;i++){
-    //     this.barChartData4[0].data.push(this.barChartData4[1].data[i]+prev)
-    //     prev=this.barChartData4[1].data[i]+prev
-    //     // console.log(prev)
-    //   }
-    // })
-
-    // this.financeService.getDepensesAnnuelList("").subscribe(response => {
-    //   const data=response.result
-    //   // Cycle prep
-    //   let dataEnc=data.map((d) => ({Mois:d.Month,Montant:d.Montant}));
-    //   let tmpTable = this.groupArrayOfObjects(
-    //     dataEnc,
-    //     "Mois"
-    //   );
-    //   // console.log(dataEnc)
-    //   const dictEnc = [];
-    //   for (const [key1, value1] of Object.entries(tmpTable)) {
-    //     let total=0
-    //     Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-    //     dictEnc.push({
-    //       Mois: key1,
-    //       total: total,
-    //     });
-    //     total=0
-    //   }
-    //   let tmpData=[]
-    //   let tmpLabels=[]
-    //   dictEnc.map((d)=>{
-    //     // console.log(d.Mois)
-    //     this.barChartLabels2.push(d.Mois)
-    //     tmpData.push(-d.total)
-    //   })
-    //   // this.barChartLabels2=tmpData
-    //   this.barChartData2[2].data=tmpData
-    //   // console.log(this.barChartLabels2)
-    //   for(let i=0;i<this.barChartData2[2].data.length;i++){
-    //     this.barChartData2[0].data.push(this.barChartData2[1].data[i]-this.barChartData2[2].data[i])
-    //     // console.log(this.barChartData2[1].data[i]-this.barChartData2[2].data[i])
-    //   }
-    //   // console.log(this.barChartData2[0].data)
-    // })
-    
     
     
   }

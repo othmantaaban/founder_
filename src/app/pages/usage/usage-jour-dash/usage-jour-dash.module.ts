@@ -9,10 +9,9 @@ import { UsageJourDashPageRoutingModule } from './usage-jour-dash-routing.module
 import { UsageJourDashPage } from './usage-jour-dash.page';
 import { NgChartsModule } from 'ng2-charts';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { ParentModule } from 'src/app/parent/parent.module'; 
-import { HorizontalBarChartComponent } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component';
 import { VerticalBarChartComponent } from 'src/app/components/vertical-bar-chart/vertical-bar-chart.component';
 import { ListingUsageComponent } from 'src/app/components/listing-usage/listing-usage.component';
+import { HorizontalBarChartComponentModule } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component.module';
 // import { VerticalBarChartComponent } from 'src/app/components/vertical-bar-chart/vertical-bar-chart.component';
 @NgModule({
   imports: [
@@ -22,10 +21,11 @@ import { ListingUsageComponent } from 'src/app/components/listing-usage/listing-
     UsageJourDashPageRoutingModule,
     NgChartsModule,
     ScrollingModule,
+    HorizontalBarChartComponentModule
   ],
   declarations: [
     UsageJourDashPage,
-    HorizontalBarChartComponent,
+    // HorizontalBarChartComponent,
     VerticalBarChartComponent,
     // UsageJourDashPage,
     ListingUsageComponent

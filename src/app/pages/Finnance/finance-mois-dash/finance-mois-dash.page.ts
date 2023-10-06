@@ -125,8 +125,11 @@ export class FinanceMoisDashPage implements OnInit {
   constructor(
     private financeService : FinanceService,private cdr: ChangeDetectorRef,private sharedService:SharedService
   ) {
-    this.clickEventSubscription= this.sharedService.getClickEvent().subscribe(()=>{
-      this.callApi();
+    this.clickEventSubscription= this.sharedService.getClickEvent().subscribe((elt)=>{
+      console.log();
+      if (elt.value == "mois") {
+        this.callApi();
+      }
     })
    }
 
@@ -144,284 +147,201 @@ export class FinanceMoisDashPage implements OnInit {
     }
   }
 
+  // getRetardsMoisList : etat_impayes_parents
+
   callApi(){ 
     this.itemsEncaissement=[]
     console.log(DateSegmentsComponent.dateValue)
   
-    let date = DateSegmentsComponent.dateValue !== undefined ? DateSegmentsComponent.dateValue : new Date().getMonth();
-    console.log(date);
-    
-    this.financeService.getEncaissementMoisList(date).subscribe(response => {
-      const data=response.result
-      console.log("enc data month: ",data)
-      // Cycle prep
-      let dataCycle=data.map((d) => ({Cycle:d.Cycle,Montant:d.Montant}));
-      let tmpTable = this.groupArrayOfObjects(
-        dataCycle,
-        "Cycle"
-      );
-      const dictCycle = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total=0
-        // console.log("here: ",Object.keys(value1).length)
-        Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-        dictCycle.push({
-          Cycle: key1,
-          total: total,
-        });
-        total=0
-      }
-      let tmpData=[]
-      let tmpLabels=[]
-      dictCycle.map((d)=>{
-        tmpLabels.push(d.Cycle)
-        tmpData.push(d.total)
-      })
-      this.cycleLabels=tmpLabels
-      this.cycleData[0]["data"]=tmpData
+    let date = DateSegmentsComponent.dateValue !== undefined ? DateSegmentsComponent.dateValue : new Date().getMonth() + 1;
+    console.log("date mois");
 
-
-      // Service prep
-      let dataService=data.map((d) => ({Service:d.Service,Montant:d.Montant}));
-      tmpTable = this.groupArrayOfObjects(
-        dataService,
-        "Service"
-      );
-      const dictService = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total=0
-        // console.log("here: ",Object.keys(value1).length)
-        Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-        dictService.push({
-          Service: key1,
-          total: total,
-        });
-        total=0
-      }
-      tmpData=[]
-      tmpLabels=[]
-      dictService.map((d)=>{
-        tmpLabels.push(d.Service)
-        tmpData.push(d.total)
-      })
-      this.serviceLabels=tmpLabels
-      this.serviceData[0]["data"]=tmpData
-
-      // Mode prep
-      let dataMode=data.map((d) => ({Mode:d.PaiementMode,Montant:d.Montant}));
-      tmpTable = this.groupArrayOfObjects(
-        dataMode,
-        "Mode"
-      );
-      const dictMode = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total=0
-        // console.log("here: ",Object.keys(value1).length)
-        Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-        dictMode.push({
-          Service: key1,
-          total: total,
-        });
-        total=0
-      }
-      tmpData=[]
-      tmpLabels=[]
-      dictMode.map((d)=>{
-        tmpLabels.push(d.Service)
-        tmpData.push(d.total)
-      })
-      this.modeLabels=tmpLabels
-      this.modeData[0]["data"]=tmpData
+    this.financeService.getEncaissementCardsList(JSON.stringify({date: date, type: "mois"}))
+    .subscribe(response => {
+      console.log(response);
+      
+      this.itemsEncaissement = []
+      response.forEach(element => {
+        // if (element.result[0].Montant) {
+          let item = {
+            title: element.title,
+            montant: element.result.montant,
+            alias: element.note,
+            unite: "MAD",
+            count: element.result.countEleves
+          }
+          this.itemsEncaissement.push(item)
+        // }
+      });
+      const data = response
 
     })
 
-    this.financeService.getCAList(date).subscribe(response => {
+    this.financeService.getCAList(date)
+    .subscribe(response => {
       const data=response.result
-      console.log("enc data month: ",data)
       // Cycle prep
-      let dataCycle=data.map((d) => ({Cycle:d.Cycle,Montant:d.Montant}));
-      let tmpTable = this.groupArrayOfObjects(
-        dataCycle,
-        "Cycle"
-      );
-      const dictCycle = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total=0
-        // console.log("here: ",Object.keys(value1).length)
-        Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-        dictCycle.push({
-          Cycle: key1,
-          total: total,
-        });
-        total=0
-      }
-      let tmpData=[]
-      let tmpLabels=[]
-      dictCycle.map((d)=>{
-        tmpLabels.push(d.Cycle)
-        tmpData.push(d.total)
-      })
-      this.caCycleLabels=tmpLabels
-      this.caCycleData[0]["data"]=tmpData
+      let lastIndex = 0 
 
 
-      // Service prep
-      let dataService=data.map((d) => ({Service:d.Service,Montant:d.Montant}));
-      tmpTable = this.groupArrayOfObjects(
-        dataService,
-        "Service"
-      );
-      const dictService = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total=0
-        // console.log("here: ",Object.keys(value1).length)
-        Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-        dictService.push({
-          Service: key1,
-          total: total,
-        });
-        total=0
-      }
-      tmpData=[]
-      tmpLabels=[]
-      dictService.map((d)=>{
-        tmpLabels.push(d.Service)
-        tmpData.push(d.total)
-      })
-      this.caServiceLabels=tmpLabels
-      this.caServiceData[0]["data"]=tmpData
+      this.caServiceData[0].data = [];
+      this.caServiceLabels = [];
+
+      this.caCycleData[0].data = [];
+      this.caCycleLabels = [];
+
+      data.forEach(element => {
+        let cycleIndex = this.caCycleLabels.indexOf(element.Cycle)
+
+        if(cycleIndex == -1) {
+          this.caCycleLabels.push(element.Cycle)
+          this.caCycleData[0].data.push(0) 
+          lastIndex = this.caCycleData[0].data.length - 1 
+        }
+
+        this.caCycleData[0].data[cycleIndex != -1 ? cycleIndex : lastIndex] += +element.Montant 
+
+        // 
+        let serviceIndex = this.caServiceLabels.indexOf(element.Service)
+        
+        if(serviceIndex == -1) {
+          this.caServiceLabels.push(element.Service)
+          this.caServiceData[0].data.push(0) 
+          lastIndex = this.caServiceData[0].data.length - 1 
+        }
+
+        this.caServiceData[0].data[serviceIndex != -1 ? serviceIndex : lastIndex] += +element.Montant 
+
+
+
+      });
+
     }) 
+    
+    this.financeService.getEncaissementMoisList(date)
+    .subscribe(response => {
+      const data = response.result
+      let lastIndex = 0
+      console.log(data);
+      
+      this.cycleData[0].data = []
+      this.cycleLabels = []
+
+            
+      this.modeData[0].data = []
+      this.modeLabels = []
+
+            
+      this.serviceData[0].data = []
+      this.serviceLabels = []
+
+      data.forEach(element => {
+        let cycleIndex = this.cycleLabels.indexOf(element.Cycle)
+        if(cycleIndex == -1) {
+          this.cycleLabels.push(element.Cycle)
+          this.cycleData[0].data.push(0)
+          lastIndex = this.cycleData[0].data.length - 1
+        }
+
+        this.cycleData[0].data[cycleIndex != -1 ? cycleIndex : lastIndex] += +element.Montant
+
+        
+        let typeIndex = this.modeLabels.indexOf(element.PaiementMode)
+        if(typeIndex == -1) {
+          this.modeLabels.push(element.PaiementMode)
+          this.modeData[0].data.push(0)
+          lastIndex = this.modeData[0].data.length - 1
+        }
+
+        this.modeData[0].data[typeIndex != -1 ? typeIndex : lastIndex] += +element.Montant
+
+
+                
+        let serviceIndex = this.serviceLabels.indexOf(element.Service)
+        if(serviceIndex == -1) {
+          this.serviceLabels.push(element.Service)
+          this.serviceData[0].data.push(0)
+          lastIndex = this.serviceData[0].data.length - 1
+        }
+
+        this.serviceData[0].data[serviceIndex != -1 ? serviceIndex : lastIndex] += +element.Montant
+
+      });
+    })
+
+
 
         // Cards Prep
-        this.financeService.getEncaissementCardsMoisList(date).subscribe(response => {
-    const data=response
-    console.log("cards data: ",data)
-    // Cycle prep
-    // this.itemsEncaissement=[] //vider la liste
-    data.map((c,index)=>{
-      if(c.result.length!=0){
-        // console.log(c.result[0])
-        if(c.title=="Dépenses"){
-          // Dépenses
-        this.itemsEncaissement.push({alias:"factures",title:c.title,montant:this.numFormatter(parseInt(c.result[0].Montant)),count:c.result[0].nbEleves,unite:"MAD"})
 
-        }else{
-          this.itemsEncaissement.push({alias:"élèves",title:c.title,montant:this.numFormatter(parseInt(c.result[0].Montant)),count:c.result[0].nbEleves,unite:"MAD"})
+    this.financeService.getRetardsMoisList(date)
+    .subscribe(response=>{
+      // const data = response
 
+      let lastIndex = 0
+
+      this.cycleRetData[0].data = []
+      this.cycleRetLabels = []
+      
+      this.niveauRetData[0].data = []
+      this.niveauRetLabels = []
+
+      this.retardsList = []
+
+      let total = 0
+      let list = []
+
+      const data = response.sort((a,b) => b.Montant - a.Montant);
+      data.forEach(element => {
+        console.log(element);
+
+        let cycleIndex =  this.cycleRetLabels.indexOf(element.Cycle)
+
+        if(cycleIndex == -1) {
+          this.cycleRetLabels.push(element.Cycle)
+          this.cycleRetData[0].data.push(0)
+          lastIndex = this.cycleRetData[0].data.length - 1
         }
-      }
-    })
 
-    let total = this.itemsEncaissement.reduce(function(prev, cur) {
-      return prev + cur.montant;
-    }, 0);
-    console.log("trésorerie: ",total)
-    
-        })
-        this.financeService.getRetardsMoisList(date).subscribe(response=>{
-          const data=response
-          console.log("retards data: ",data)
-          // Cycle prep
-          let dataCycle=data.map((d) => ({Cycle:d.Cycle,Montant:d.totalImpaye}));
-          let tmpTable = this.groupArrayOfObjects(
-            dataCycle,
-            "Cycle"
-          );
-          const dictCycle = [];
-          for (const [key1, value1] of Object.entries(tmpTable)) {
-            let total=0
-            // console.log("here: ",Object.keys(value1).length)
-            Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-            dictCycle.push({
-              Cycle: key1,
-              total: total,
-            });
-            total=0
-          }
-          let tmpData=[]
-          let tmpLabels=[]
-          dictCycle.map((d)=>{
-            tmpLabels.push(d.Cycle)
-            tmpData.push(d.total)
+        this.cycleRetData[0].data[cycleIndex ? cycleIndex : lastIndex] += +element.totalImpaye
+        
+        let niveauIndex =  this.niveauRetLabels.indexOf(element.Niveau)
+
+        if(niveauIndex == -1) {
+          this.niveauRetLabels.push(element.Niveau)
+          this.niveauRetData[0].data.push(0)
+          lastIndex = this.niveauRetData[0].data.length - 1
+        }
+
+        this.niveauRetData[0].data[niveauIndex ? niveauIndex : lastIndex] += +element.totalImpaye
+
+        
+        list.push(
+          { 
+            eleve: element.Eleve,
+            montant: element.totalImpaye
           })
-    
-          this.cycleRetLabels=tmpLabels
-          this.cycleRetData[0]["data"]=tmpData
-          // console.log(tmpData)
-          
-          // Service prep
-          let dataNiveau=data.map((d) => ({Niveau:d.Niveau,Montant:d.totalImpaye}));
-          tmpTable = this.groupArrayOfObjects(
-            dataNiveau,
-            "Niveau"
-          );
-          const dictNiveau = [];
-          for (const [key1, value1] of Object.entries(tmpTable)) {
-            let total=0
-            // console.log("here: ",Object.keys(value1).length)
-            Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-            dictNiveau.push({
-              Niveau: key1,
-              total: total,
-            });
-            total=0
-          }
-          tmpData=[]
-          tmpLabels=[]
-          dictNiveau.map((d)=>{
-            tmpLabels.push(d.Niveau)
-            tmpData.push(d.total)
-          })
-          this.niveauRetLabels=tmpLabels
-          this.niveauRetData[0]["data"]=tmpData
-    
-          // Service prep
-          let dataService=data.map((d) => ({Service:d.Service,Montant:d.Montant}));
-          tmpTable = this.groupArrayOfObjects(
-            dataService,
-            "Service"
-          );
-          const dictService = [];
-          for (const [key1, value1] of Object.entries(tmpTable)) {
-            let total=0
-            // console.log("here: ",Object.keys(value1).length)
-            Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-            dictService.push({
-              Service: key1,
-              total: total,
-            });
-            total=0
-          }
-          tmpData=[]
-          tmpLabels=[]
-          dictService.map((d)=>{
-            tmpLabels.push(d.Service)
-            tmpData.push(d.total)
-          })
-          this.serviceRetLabels=tmpLabels
-          this.serviceRetData[0]["data"]=tmpData
-    
-          // Cycle prep
-          let dataRetards=data.map((d) => ({Eleve:d.Eleve,Montant:d.totalImpaye}));
-          // 
-    
-          dataRetards=dataRetards.sort((a,b) => b.Montant - a.Montant);
-          dataRetards.map((a)=>{
-            this.retardsList.push({eleve:a.Eleve,montant:a.Montant})
-          })
-          this.retardsList=this.retardsList.slice(0,10)
-            let totalMontant= dataRetards.reduce(function(prev, cur) {
-              return prev + cur.Montant;
-            }, 0);
-            this.retardsTotal.count=dataRetards.length
-            this.itemsEncaissement.push({alias:"élèves",title:"Retards des paiements",montant:this.numFormatter(totalMontant),count:dataRetards.length,unite:"MAD"})
-           
-        })
+
+        total += +element.totalImpaye
+
+      });
+      
+      
+      this.retardsList = list.length != 0 ? list.slice(0,10) : []
+
+      // this.itemsEncaissement.push(
+      //   {
+      //     alias:"élèves",
+      //     title:"Retards des paiements",
+      //     montant:this.numFormatter(total),
+      //     count: this.retardsList.length,
+      //     unite:"MAD"
+      //   })  
+    })
 
   }
 
    // Group By Function
-   groupArrayOfObjects = (list, key) => {
+  groupArrayOfObjects = (list, key) => {
     return list.reduce(function (rv, x) {
       (rv[x[key]] = rv[x[key]] || []).push(x);
       return rv;

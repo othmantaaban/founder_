@@ -13,6 +13,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ParentModule } from 'src/app/parent/parent.module';
 import { HorizontalBarChartComponent } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component';
+import { HorizontalBarChartComponentModule } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component.module';
 
 
 
@@ -24,10 +25,10 @@ import { HorizontalBarChartComponent } from 'src/app/components/horizontal-bar-c
     AdminMoisDashPageRoutingModule,
     NgChartsModule,
     ScrollingModule,
+    HorizontalBarChartComponentModule
   ],
   declarations: [
     AdminMoisDashPage,
-    HorizontalBarChartComponent,
     
   ]
 })

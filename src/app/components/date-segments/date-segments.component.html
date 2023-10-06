@@ -41,7 +41,7 @@
 <ion-toolbar>
   <ion-grid>
     <ion-row>
-      <ion-segment [value]="selectedValue" style="margin: auto;width:90%;margin-top:10px" (ionChange)="segmentChanged($event)" mode="ios">
+      <ion-segment #segment [value]="selectedValue" style="margin: auto;width:90%;margin-top:10px" (ionChange)="segmentChanged($event)" mode="ios">
         <ion-segment-button  
           *ngFor="let path of listPaths;"
           [value]="path.value" 
@@ -68,7 +68,7 @@
                 </svg>
             </button>
                <!-- <span class="mx-4">22 juin 2022</span> -->
-               <span class="mx-4">{{itemsList[getStaticDate]?.francais}}</span>
+               <span class="mx-4">{{itemsList[selected]?.francais}}</span>
                <button  class="btn" (click)="leftDate()">
                 <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M0.388912 11.62C0.290253 11.62 0.189288 11.581 0.113573 11.5053C-0.0378576 11.3538 -0.0378576 11.106 0.113573 10.9546L5.29662 5.77157L0.189287 0.66423C0.037857 0.512799 0.037857 0.265004 0.189287 0.113574C0.340718 -0.0378571 0.588513 -0.0378571 0.739944 0.113574L6.1249 5.49624C6.27633 5.64767 6.27633 5.89546 6.1249 6.04689L0.666524 11.5053C0.588514 11.5833 0.489855 11.62 0.388912 11.62Z" fill="#A8A8A8"/>

@@ -17,6 +17,8 @@ import { ListingFinanceComponent } from 'src/app/components/listing-finance/list
 import { ListingFinanceAvoirsComponent } from 'src/app/components/listing-finance-avoirs/listing-finance-avoirs.component';
 import { ListingDiscountComponent } from 'src/app/components/listing-discount/listing-discount.component';
 import { ListingFinanceDepenseComponent } from 'src/app/components/listing-finance-depense/listing-finance-depense.component';
+import { NgChartsModule } from 'ng2-charts';
+import { HorizontalBarChartComponentModule } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component.module';
 
 @NgModule({
   imports: [
@@ -24,14 +26,14 @@ import { ListingFinanceDepenseComponent } from 'src/app/components/listing-finan
     FormsModule,
     IonicModule,
     FinanceJourDashPageRoutingModule,
-    // NgChartsModule,
+    NgChartsModule,
     ScrollingModule,
     // ParentModule
+    HorizontalBarChartComponentModule
   ],
   declarations: [
     FinanceJourDashPage,
     CardsFinanceComponent,
-    HorizontalBarChartComponent,
     ListingRecouvrementsComponent,
     ListingFinanceAvoirsComponent,
     ListingDiscountComponent,

@@ -151,6 +151,15 @@ export class FinanceJourDashPage implements OnInit {
     { data: [], label: '', backgroundColor: ["#2B2A64", "#F7643B", "#EE386E", "#C4013B"] },
   ];
 
+
+  public done1 = false;
+  public done2 = false;
+  public done3 = false;
+  public done4 = false;
+  public done5 = false;
+  public done6 = false;
+  public done7 = false;
+
   slideChanged() {
   }
 
@@ -158,11 +167,18 @@ export class FinanceJourDashPage implements OnInit {
   constructor(
     private financeService: FinanceService, private cdr: ChangeDetectorRef, public loadingController: LoadingController, private sharedService: SharedService
   ) {
-    this.clickEventSubscription = this.sharedService.getClickEvent().subscribe(() => {
+    this.clickEventSubscription = this.sharedService.getClickEvent().subscribe((elt) => {
       // this.callApi();
-      this.presentLoadingWithOptions()
+
+      if (elt.value == "jour") {
+        this.presentLoadingWithOptions()
+      }
     })
   }
+
+  // getEncaissementList :get_encaissements
+
+  // getDepensesList: get_depenses
 
   callApi() {
     const formatedDate = () => {
@@ -177,160 +193,143 @@ export class FinanceJourDashPage implements OnInit {
     let date = DateSegmentsComponent.dateValue !== undefined ? DateSegmentsComponent.dateValue : formatedDate();
     console.log(date);
     
+    let done1 = false;
+    let done2 = false;
+    let done3 = false;
+    let done4 = false;
+    let done5 = false;
+    let done6 = false;
+    let done7 = false;
+
+        // Cards Prep
+    this.financeService.getEncaissementCardsList(JSON.stringify({date: date, type: "jour"}))
+    .subscribe(response => {
+      console.log(response);
+      
+      this.itemsEncaissement = []
+      response.forEach(element => {
+        console.log(element);
+        
+        let item = {
+          title: element.title,
+          montant: element.result.montant,
+          alias: element.note,
+          unite: "MAD",
+          count: element.result.countEleves
+        }
+        this.itemsEncaissement.push(item)
+      });
+
+      done1 = true
+
+    })
+    
     // Donut Chart Prep(Encaissement)
-    this.financeService.getEncaissementList(date).subscribe(response => {
+    this.financeService.getEncaissementList(date)
+    .subscribe(response => {
+      
       const data = response.result
-      // console.log("encaissement data hare: ",data)
-      // Cycle prep
-      let dataCycle = data.map((d) => ({ Cycle: d.Cycle, Montant: d.Montant }));
-      let tmpTable = this.groupArrayOfObjects(
-        dataCycle,
-        "Cycle"
-      );
-      const dictCycle = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total = 0
-        // console.log("here: ",Object.keys(value1).length)
-        Object.values(value1).map(v => { total += parseFloat(v.Montant) })
-        dictCycle.push({
-          Cycle: key1,
-          total: total,
-        });
-      }
-      let tmpData = []
-      let tmpLabels = []
-      dictCycle.map((d) => {
-        tmpLabels.push(d.Cycle)
-        tmpData.push(d.total)
-      })
-      // this.encCycleData.labels=tmpLabels
-      // this.encCycleData.datasets[0]["data"]=tmpData
-      this.encCycleLabels = tmpLabels
-      this.encCycleData[0]["data"] = tmpData
-      console.log("encaissement cycle data: ", this.encCycleData)
 
-      // Service prep
-      let dataService = data.map((d) => ({ Service: d.Service, Montant: d.Montant }));
-      tmpTable = this.groupArrayOfObjects(
-        dataService,
-        "Service"
-      );
-      // console.log("here: ",dataService)
-      const dictService = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total = 0
-        // console.log("here: ",Object.keys(value1))
-        Object.values(value1).map(v => { total += parseFloat(v.Montant) })
-        dictService.push({
-          Service: key1,
-          total: total,
-        });
-        total = 0
-      }
-      // console.log("here: ",dictService)
-      tmpData = []
-      tmpLabels = []
-      dictService.map((d) => {
-        tmpLabels.push(d.Service)
-        tmpData.push(d.total)
-      })
-      // this.encServiceData.labels=tmpLabels
-      // this.encServiceData.datasets[0]["data"]=tmpData
-      this.encServiceLabels = tmpLabels
-      this.encServiceData[0]["data"] = tmpData
-      // console.log("here: ",this.encServiceData)
+      this.encCycleData[0]["data"] = []
+      this.encCycleLabels = []
+            
+      this.encTypeData[0]["data"] = []
+      this.encTypeLabels = []
+                  
+      this.encServiceData[0]["data"] = []
+      this.encServiceLabels = []
+                        
+      this.encSiteData[0]["data"] = []
+      this.encSiteLabels = []
 
-      // Service prep
-      let dataSite = data.map((d) => ({ Site: d.Site, Montant: d.Montant }));
-      tmpTable = this.groupArrayOfObjects(
-        dataSite,
-        "Site"
-      );
-      // console.log("here: ",dataService)
-      const dictSite = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total = 0
-        // console.log("here: ",Object.keys(value1))
-        Object.values(value1).map(v => { total += parseFloat(v.Montant) })
-        dictSite.push({
-          Site: key1,
-          total: total,
-        });
-        total = 0
-      }
-      // console.log("here: ",dictService)
-      tmpData = []
-      tmpLabels = []
-      dictSite.map((d) => {
-        tmpLabels.push(d.Site)
-        tmpData.push(d.total)
-      })
-      // this.encServiceData.labels=tmpLabels
-      // this.encServiceData.datasets[0]["data"]=tmpData
-      this.encSiteLabels = tmpLabels
-      this.encSiteData[0]["data"] = tmpData
-      // console.log("here: ",this.encServiceData)
+      
 
 
-      // Type prep
-      let dataType = data.map((d) => ({ Type: d.PaiementMode, Montant: d.Montant }));
-      const tmpTable2 = this.groupArrayOfObjects(
-        dataType,
-        "Type"
-      );
-      const dictType = [];
-      for (const [key1, value1] of Object.entries(tmpTable2)) {
-        let total = 0
-        Object.values(value1).map(v => { total += parseFloat(v.Montant) })
-        dictType.push({
-          Type: key1,
-          total: total,
-        });
-        total = 0
-      }
-      tmpData = []
-      tmpLabels = []
-      dictType.map((d) => {
-        tmpLabels.push(d.Type)
-        tmpData.push(d.total)
-      })
-      // this.encTypeData.labels=tmpLabels
-      // this.encTypeData.datasets[0]["data"]=tmpData
-      this.encTypeLabels = tmpLabels
-      this.encTypeData[0]["data"] = tmpData
-      // console.log(this.encTypeData)
-      // this.loaders[0]=true
-      this.cdr.markForCheck();
+      data.forEach(element => {
+        let lastIndex = 0
+        
+        // encaissment Par cycle 
+
+        let cycleIndex = this.encCycleLabels.indexOf(element.Cycle)
+        if(cycleIndex == -1) {
+          this.encCycleLabels.push(element.Cycle)
+          this.encCycleData[0]["data"].push(0)  
+          lastIndex = this.encCycleData[0]["data"].length - 1
+        }
+        
+        this.encCycleData[0]["data"][cycleIndex != -1 ? cycleIndex : lastIndex] += +element.Montant
+
+        // encaissment Par cycle 
+
+        // encaissment Par type 
+
+        let modeIndex = this.encTypeLabels.indexOf(element.PaiementMode)
+        if(modeIndex == -1) {
+          this.encTypeLabels.push(element.PaiementMode)
+          this.encTypeData[0]["data"].push(0)  
+          lastIndex = this.encTypeData[0]["data"].length - 1
+        }
+        
+        this.encTypeData[0]["data"][modeIndex != -1 ? modeIndex : lastIndex] += +element.Montant
+
+        // encaissment Par type 
+
+        // encaissment Par service 
+
+
+        let serviceIndex = this.encServiceLabels.indexOf(element.Service)
+        if(serviceIndex == -1) {
+          this.encServiceLabels.push(element.Service)
+          this.encServiceData[0]["data"].push(0)  
+          lastIndex = this.encServiceData[0]["data"].length - 1
+        }
+        
+        this.encServiceData[0]["data"][serviceIndex != -1 ? serviceIndex : lastIndex] += +element.Montant
+
+        // encaissment Par service 
+
+        // encaissment Par service 
+        
+        let siteIndex = this.encSiteLabels.indexOf(element?.Site)
+        if(siteIndex == -1) {
+          this.encSiteLabels.push(element.Site)
+          this.encSiteData[0]["data"].push(0)  
+          lastIndex = this.encSiteData[0]["data"].length - 1
+        }
+        
+        this.encSiteData[0]["data"][siteIndex != -1 ? siteIndex : lastIndex] += +element.Montant
+      });
+
+      done2 = true
 
     })
-    // Cards Prep
-    this.financeService.getEncaissementCardsList(date).subscribe(response => {
-      this.itemsAnnulations = []
-      const data = response
-      // Cycle prep
-      this.itemsEncaissement = [] //vider la liste
-      data.filter((d) => { return d.title == "Encaissements" || d.title == "Total remise" }).map((c, index) => {
-        if (c.result.length != 0) {
-          // console.log(c.result[0])
-          this.itemsEncaissement.push({ alias: c.alias, title: c.title, montant: this.numFormatter(parseInt(c.result[0].Montant)), count: c.result[0].nbEleves, unite: "MAD" })
-        }
-        console.log("items encaissement", this.itemsEncaissement)
-      })
 
-      data.filter((d) => { return d.title != "Encaissements" && d.title != "Total remise" && d.title != "Retards" && d.title != "Total annuel des remises" }).map((c, index) => {
-        if (c.result.length != 0) {
-          // console.log(c.result[0])
-          this.itemsAnnulations.push({ alias: c.alias, title: c.title, montant: this.numFormatter(parseInt(c.result[0].Montant)), count: c.result[0].nbEleves, unite: "MAD" })
-        }
-      })
+    this.financeService.getRecouvrementsList(date)
+    .subscribe(response => {
+      this.recouvrementsList = []
 
-      // console.log("cards data: ",this.itemsEncaissement)
+      const data = response.result
+      
+      data.forEach(
+        (d) => (
+        this.recouvrementsList.push({ 
+          Eleve: d.Eleve, 
+          Classe: d.Classe, 
+          Action: d.Action, 
+          DateAction: d.DateAction 
+        })
+      ));
+      done3 = true
 
     })
+
 
     // cards Prep(Depenses)
-    this.financeService.getDepensesList(date).subscribe(response => {
+    this.financeService.getDepensesList(date)
+    .subscribe(response => {
       const data = response.result
+      console.log(data);
+      
       const countDep = response.count
       let depensesMontant = data.map((d) => (d.Montant));
       let totalMontant = 0
@@ -381,61 +380,66 @@ export class FinanceJourDashPage implements OnInit {
       this.depCategorieData[0]["data"] = tmpData
       console.log("here 2: ", this.depCategorieData)
 
+
+      done4 = true
+
     })
 
     // Listing Annulation:
     // "2022-08-02"
-    this.financeService.getEncaissementAnnulationsList(date).subscribe(response => {
+    this.financeService.getEncaissementAnnulationsList(date)
+    .subscribe(response => {
       this.annulationsList = []
       const data = response.result
       // Cycle prep
       let dataAnnulations = data.map((d) => ({ User: d.Eleve, Montant: d.Montant }));
 
-      dataAnnulations.map((a) => {
-        this.annulationsList.push({ eleve: a.User, montant: a.Montant })
-      })
+      // dataAnnulations.map((a) => {
+      //   this.annulationsList.push({ eleve: a.User, montant: a.Montant })
+      // })
+      this.annulationsList = [...dataAnnulations]
 
       // console.log("Annulation items here: ",this.annulationsList)
 
+      done5 = true
 
     })
 
 
-    this.financeService.getDiscountsList(date).subscribe(response => {
+    this.financeService.getDiscountsList(date)
+    .subscribe(response => {
       this.discountsList = []
 
       const data = response.result
       // Cycle prep
       let dataDiscounts = data.map((d) => ({ Eleve: d.Eleve, Service: d.Service, DiscountAmountTotal: d.DiscountAmountTotal, DiscountAmount: d.DiscountAmount, nbMois: d.nbMois }));
 
-      dataDiscounts.map((d) => {
-        this.discountsList.push({ Eleve: d.Eleve, Service: d.Service, DiscountAmount: d.DiscountAmount, DiscountAmountTotal: d.DiscountAmountTotal })
-      })
+      // dataDiscounts.map((d) => {
+      //   this.discountsList.push({ Eleve: d.Eleve, Service: d.Service, DiscountAmount: d.DiscountAmount, DiscountAmountTotal: d.DiscountAmountTotal })
+      // })
+      this.discountsList = [...dataDiscounts]
+
+      done6 = true
+
     })
 
 
-    this.financeService.getAvoirsList(date).subscribe(response => {
+    this.financeService.getAvoirsList(date)
+    .subscribe(response => {
       this.avoirsList = []
 
       const data = response.result
       let dataAvoirs = data.map((d) => ({ Eleve: d.Eleve, Amount: d.Amount, ConsumedAmount: d.ConsumedAmount, UserBy: d.UserBy }));
+      this.avoirsList = [...dataAvoirs]
+      // dataAvoirs.map((d) => {
+      //   this.avoirsList.push({ Eleve: d.Eleve, Amount: d.Amount, ConsumedAmount: d.ConsumedAmount, UserBy: d.UserBy })
+      // })
 
-      dataAvoirs.map((d) => {
-        this.avoirsList.push({ Eleve: d.Eleve, Amount: d.Amount, ConsumedAmount: d.ConsumedAmount, UserBy: d.UserBy })
-      })
+      done7 = true
+
     })
 
 
-    this.financeService.getRecouvrementsList(date).subscribe(response => {
-      this.recouvrementsList = []
-
-      const data = response.result
-      let dataRecouvrements = data.map((d) => ({ Eleve: d.Eleve, Classe: d.Classe, Action: d.Action, DateAction: d.DateAction }));
-
-      dataRecouvrements.map((d) => {
-        this.recouvrementsList.push({ Eleve: d.Eleve, Classe: d.Classe, Action: d.Action, DateAction: d.DateAction })
-      })
-    })
 
 
 

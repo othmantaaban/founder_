@@ -7,18 +7,19 @@ import { IonicModule } from '@ionic/angular';
 import { PedagDashPageRoutingModule } from './pedag-dash-routing.module';
 
 import { PedagDashPage } from './pedag-dash.page';
-import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
+import { DateSegmentsComponentModule } from 'src/app/components/date-segments/date-segment.component.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    PedagDashPageRoutingModule
+    PedagDashPageRoutingModule,
+    DateSegmentsComponentModule
   ],
   declarations: [
     PedagDashPage,
-    DateSegmentsComponent
+    // DateSegmentsComponent
   ]
 })
 export class PedagDashPageModule {}
