@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
 
 @Component({
   selector: 'app-usage-dash',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./usage-dash.page.scss'],
 })
 export class UsageDashPage implements OnInit {
+  @ViewChild("datasegment") datasegment : DateSegmentsComponent
+ 
 
   pathList = [
     // {vue:"Jour",path:"/tabs/usage-jour-dash",value:"jour"},
@@ -16,5 +19,10 @@ export class UsageDashPage implements OnInit {
 
   ngOnInit() {
   }
+
+  ionViewWillLeave() {
+    this.datasegment.ngOnDestroy()
+  }
+
 
 }

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
@@ -9,6 +10,8 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./pedag-dash.page.scss'],
 })
 export class PedagDashPage implements OnInit {
+  @ViewChild("datesegment") datesegment : DateSegmentsComponent
+
   public pathList=[
     {vue:'Jour', path:'/tabs/admin-jour-dash',value:'jour'},
     {vue:'Mois', path:'/tabs/admin-mois-dash',value:'mois'},
@@ -42,6 +45,10 @@ export class PedagDashPage implements OnInit {
     });
   }
   ngOnInit() {
+  }
+
+  ionViewWillLeave() {
+    this.datesegment.ngOnDestroy()
   }
 
 }

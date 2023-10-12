@@ -1,9 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { ChartData } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
 import { FinanceService } from 'src/app/finance.service';
+// import { ApiService } from 'src/app/services/api.service';
+import { ApiService } from 'src/app/services/api/api.service';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
@@ -12,8 +14,8 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./finance-jour-dash.page.scss'],
 })
 export class FinanceJourDashPage implements OnInit {
-
-
+  public remise = []
+  public remise_count = 0
   @ViewChild('slides') slides;
   public loaders = [false, false, false, false, false, false, false]
 
@@ -165,7 +167,13 @@ export class FinanceJourDashPage implements OnInit {
 
   clickEventSubscription: Subscription;
   constructor(
-    private financeService: FinanceService, private cdr: ChangeDetectorRef, public loadingController: LoadingController, private sharedService: SharedService
+    private api : ApiService,  
+    private financeService: FinanceService, 
+    private cdr: ChangeDetectorRef, 
+    public loadingController: LoadingController, 
+    private sharedService: SharedService,
+    private navCtrl : NavController 
+
   ) {
     this.clickEventSubscription = this.sharedService.getClickEvent().subscribe((elt) => {
       // this.callApi();
@@ -204,7 +212,6 @@ export class FinanceJourDashPage implements OnInit {
         // Cards Prep
     this.financeService.getEncaissementCardsList(JSON.stringify({date: date, type: "jour"}))
     .subscribe(response => {
-      console.log(response);
       
       this.itemsEncaissement = []
       response.forEach(element => {
@@ -290,14 +297,15 @@ export class FinanceJourDashPage implements OnInit {
 
         // encaissment Par service 
         
-        let siteIndex = this.encSiteLabels.indexOf(element?.Site)
-        if(siteIndex == -1) {
-          this.encSiteLabels.push(element.Site)
-          this.encSiteData[0]["data"].push(0)  
-          lastIndex = this.encSiteData[0]["data"].length - 1
-        }
+        // let siteIndex = this.encSiteLabels.indexOf(element?.Site)
+        // if(siteIndex == -1) {
+        //   this.encSiteLabels.push(element.Site)
+        //   this.encSiteData[0]["data"].push(0)  
+        //   lastIndex = this.encSiteData[0]["data"].length - 1
+        // }
         
-        this.encSiteData[0]["data"][siteIndex != -1 ? siteIndex : lastIndex] += +element.Montant
+        // this.encSiteData[0]["data"][siteIndex != -1 ? siteIndex : lastIndex] += +element.Montant
+
       });
 
       done2 = true
@@ -438,12 +446,20 @@ export class FinanceJourDashPage implements OnInit {
       done7 = true
 
     })
+    // let d = "2022-08-24"
+    this.api.get({"period":date},"remises_jour")
+    .subscribe(elt => {
+      console.log(elt);
+      this.remise = elt.requests
+      this.remise_count = elt.total
+    })
 
 
 
 
 
 
+    // remises_jour
 
 
     // Depenses
@@ -561,6 +577,10 @@ export class FinanceJourDashPage implements OnInit {
     // this.clickEventSubscription= this.sharedService.getClickEvent().subscribe(()=>{
     //   this.presentLoadingWithOptions()
     // })
+  }
+
+  navigateTo(link: string){
+    this.navCtrl.navigateRoot([link]);
   }
 
 }

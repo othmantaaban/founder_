@@ -101,7 +101,9 @@ export class UsageJourDashPage implements OnInit {
       return `${year}-${month}-${day}`;
     }
 
-    let date = DateSegmentsComponent.dateValue !== undefined ? DateSegmentsComponent.dateValue : formatedDate();
+    // let date = DateSegmentsComponent.dateValue !== undefined ? DateSegmentsComponent.dateValue : formatedDate();
+    let date = DateSegmentsComponent.dateValue !== undefined ? DateSegmentsComponent.dateValue : new Date().getMonth() + 1;
+
     console.log(date);
     
     this.parentsCnxList = []

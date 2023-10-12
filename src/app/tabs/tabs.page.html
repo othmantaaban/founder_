@@ -1,23 +1,21 @@
-<ion-tabs>
-  <ion-tab-bar slot="bottom" (ionTabsWillChange)="tabWillChange($event)" (ionTabsDidChange)="tabWillChange($event)">
+<ion-tabs (ionTabsWillChange)="tabWillChange($event)">
+  <ion-tab-bar slot="bottom"  (ionTabsDidChange)="tabWillChange($event)">
     <ion-tab-button tab="finance-dash" style="background:transparent">
       <ion-icon style="font-size: 24px;" name="card"></ion-icon>
       Finance
     </ion-tab-button>
-
-    <ion-tab-button tab="admin" style="background:transparent">
+  
+    <ion-tab-button tab="admin" style="background:transparent; margin-right: 50px;">
+      
       <ion-icon style="font-size: 24px;" name="person"></ion-icon>
       Administration
     </ion-tab-button>
 
-    <!-- <ion-tab-button tab="suivi-inscription" style="background:transparent">
+    <!-- <ion-tab-button class="inscri" tab="suivi-inscription" style="background:transparent">
       <ion-icon style="font-size: 24px;" name="people"></ion-icon>
       Inscriptions
     </ion-tab-button> -->
 
-    <!-- <ion-tab-button tab="pedag-dash" style="background:transparent">
-      <ion-label style="font-size:0.8em"></ion-label>
-    </ion-tab-button>  -->
 
     <ion-tab-button tab="pedag-dash" style="background:transparent">
       <ion-icon style="font-size: 24px;" name="school"></ion-icon>
@@ -44,3 +42,13 @@
     </svg> -->
   </ion-fab-button>
 </ion-fab>
+
+
+    <!-- <ion-tab-button tab="suivi-inscription" style="background:transparent">
+      <ion-icon style="font-size: 24px;" name="people"></ion-icon>
+      Inscriptions
+    </ion-tab-button> -->
+
+    <!-- <ion-tab-button tab="pedag-dash" style="background:transparent">
+      <ion-label style="font-size:0.8em"></ion-label>
+    </ion-tab-button>  -->

@@ -104,52 +104,84 @@ async presentLoadingWithOptions() {
     console.log(date);
     
     this.itemsAdmin=[]
+
+    this.msgEtatsLabels=[]
+    this.msgEtatsData[0]["data"]=[]
+
     this.adminService.getMessages(date).subscribe(response =>{
       const data=response.result
-      let dataVue=data.filter((d)=>{
-        return d.ViewsID!=null
-      }).map((d) => ({Cycle:d.Cycle}));
-      // Cycle prep
-      let dataDem=data.map((d) => ({Cycle:d.Cycle,Date:d.Date}));
-      this.itemsAdmin.push({title:"Messages",total:dataDem.length,label:"Messages",alias1:"Vues",count1:dataVue.length})      
+      // let dataVue=data.filter((d)=>{
+      //   return d.ViewsID!=null
+      // }).map((d) => ({Cycle:d.Cycle}));
+      // // Cycle prep
+      // let dataDem=data.map((d) => ({Cycle:d.Cycle,Date:d.Date}));
+      // this.itemsAdmin.push({title:"Messages",total:dataDem.length,label:"Messages",alias1:"Vues",count1:dataVue.length})      
     
-      let dataMess=data.map((d) => ({User:d.User,Nature:d.Sujet,Vu:d.ViewsID})).slice(0,10);
-      console.log(dataMess)
-      this.messagesList=[]
-      dataMess.map((d)=>{
-        if(d.Vu!=null){
-          this.messagesList.push({user:d.User,categorie:d.Nature,Statut:"Vu"})
-        }else{
-          this.messagesList.push({user:d.User,categorie:d.Nature,Statut:"Non Vue"})
-        }
-      })
-      console.log("messages list: ",this.messagesList);
-      let tmpTable = this.groupArrayOfObjects(
-        this.messagesList,
-        "Statut"
-      );
-      console.log("tmp messages list: ",dataMess);
-      console.log("tmp messages list: ",tmpTable);
+      // let dataMess=  
+        // data.map((d) => ({
+        //   User:d.User,Nature:d.Sujet,Vu:d.ViewsID})).slice(0,10);
 
-      let tmpData=[]
-      let tmpLabels=[]
-      const msgEtat = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total=0
-        // console.log("here: ",Object.keys(value1).length)
-        // Object.values(value1).map(v =>{total+=parseFloat(v.Count)})
-        msgEtat.push({
-          Etat: key1,
-          total: Object.values(value1).length,
-        });
-        total=0
-      }
-      msgEtat.map((d)=>{
-        tmpLabels.push(d.Etat)
-        tmpData.push(d.total)
-      })
-      this.msgEtatsLabels=tmpLabels
-      this.msgEtatsData[0]["data"]=tmpData
+      // console.log(dataMess)
+      // this.messagesList=[]
+      // dataMess.map((d)=>{
+      //   if(d.Vu!=null){
+      //     this.messagesList.push({user:d.User,categorie:d.Nature,Statut:"Vu"})
+      //   }else{
+      //     this.messagesList.push({user:d.User,categorie:d.Nature,Statut:"Non Vue"})
+      //   }
+      // })
+      // console.log("messages list: ",this.messagesList);
+      // let tmpTable = this.groupArrayOfObjects(
+      //   this.messagesList,
+      //   "Statut"
+      // );
+      // console.log("tmp messages list: ",dataMess);
+      // console.log("tmp messages list: ",tmpTable);
+
+      // let tmpData=[]
+      // let tmpLabels=[]
+      // const msgEtat = [];
+      // for (const [key1, value1] of Object.entries(tmpTable)) {
+      //   let total=0
+      //   // console.log("here: ",Object.keys(value1).length)
+      //   // Object.values(value1).map(v =>{total+=parseFloat(v.Count)})
+      //   msgEtat.push({
+      //     Etat: key1,
+      //     total: Object.values(value1).length,
+      //   });
+      //   total=0
+      // }
+      // msgEtat.map((d)=>{
+      //   tmpLabels.push(d.Etat)
+      //   tmpData.push(d.total)
+      // })
+      // this.msgEtatsLabels=tmpLabels
+      // this.msgEtatsData[0]["data"]=tmpData
+      console.log(data);
+      
+
+      this.msgEtatsLabels = ["vu", "Non vu"]
+      this.msgEtatsData[0]["data"]=[0, 0]
+      let i = 0
+      data.forEach((element, i) => {
+        console.log(element);
+        console.log(i);
+        if(JSON.parse(element.ViewsID)!=null) {
+          if(this.messagesList.length < 10) {
+            this.messagesList.push({user:element.User,categorie:element.Nature,Statut:"Vu"})
+          }
+          i = 0
+        } else {
+          console.log("not vu");
+          if(this.messagesList.length < 10) {
+            this.messagesList.push({user:element.User,categorie:element.Nature,Statut:"Non Vu"})
+          }
+          i = 1
+        }
+        this.msgEtatsData[0]["data"][i] += 1
+
+        
+      });
 
     })
     this.adminService.getDemandes(date).subscribe(response =>{

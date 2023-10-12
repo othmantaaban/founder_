@@ -31,7 +31,7 @@ export class TabsPage {
 
   tabWillChange(ev) {
     console.log(ev);
-    
+    // return this.navController.navigateRoot([`tabs/${ev.tab}`])
   }
 
 }

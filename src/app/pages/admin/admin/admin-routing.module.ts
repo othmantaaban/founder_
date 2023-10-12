@@ -22,7 +22,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/admin/jour',
+        redirectTo: '/tabs/admin/mois',
         pathMatch: 'full'
       }
     ]

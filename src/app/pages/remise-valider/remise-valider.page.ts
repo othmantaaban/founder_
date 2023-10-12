@@ -39,6 +39,8 @@ export class RemiseValiderPage implements OnInit {
   getData(){
 
     this.api.get({}, 'remises_valider').subscribe((result) => {
+      console.log(result);
+      
       this._result = result;
     },
     (error)=>{

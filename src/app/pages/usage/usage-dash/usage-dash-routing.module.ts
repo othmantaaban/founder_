@@ -9,12 +9,12 @@ const routes: Routes = [
     component: UsageDashPage,
     children : [
       {
-        path: 'jour',
+        path: 'mois',
         loadChildren: () => import('../usage-jour-dash/usage-jour-dash.module').then( m => m.UsageJourDashPageModule)
       },
       {
         path: '',
-        redirectTo: 'jour',
+        redirectTo: 'mois',
         pathMatch: 'full'
       }
     ]

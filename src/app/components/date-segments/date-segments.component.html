@@ -41,10 +41,10 @@
 <ion-toolbar>
   <ion-grid>
     <ion-row>
-      <ion-segment #segment [value]="selectedValue" style="margin: auto;width:90%;margin-top:10px" (ionChange)="segmentChanged($event)" mode="ios">
+      <ion-segment #segment [value]="selectedValue ? selectedValue : 'mois'" style="margin: auto;width:90%;margin-top:10px" (ionChange)="segmentChanged($event)" mode="ios">
         <ion-segment-button  
           *ngFor="let path of listPaths;"
-          [value]="path.value" 
+          [value]="path.value"
         >
           <ion-router-link color="dark">
             <ion-label><h3>{{path.vue}}</h3></ion-label>

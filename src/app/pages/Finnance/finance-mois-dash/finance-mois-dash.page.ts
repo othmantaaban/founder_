@@ -220,53 +220,62 @@ export class FinanceMoisDashPage implements OnInit {
     
     this.financeService.getEncaissementMoisList(date)
     .subscribe(response => {
-      const data = response.result
-      let lastIndex = 0
-      console.log(data);
+      console.log(response);
       
-      this.cycleData[0].data = []
-      this.cycleLabels = []
+      // const data = response.result
+      let lastIndex = 0
+      // console.log(data);
+      
+      this.cycleLabels = response.cycle[0]
+      this.cycleData = response.cycle[1]
 
             
-      this.modeData[0].data = []
-      this.modeLabels = []
+      this.modeData[0].data = response.paiement[1]
+      this.modeLabels = response.paiement[0]
 
-            
+      console.log(response.cycle[1]);
+      console.log(response.paiement[1]);
+      
       this.serviceData[0].data = []
       this.serviceLabels = []
+      
+            
 
-      data.forEach(element => {
-        let cycleIndex = this.cycleLabels.indexOf(element.Cycle)
-        if(cycleIndex == -1) {
-          this.cycleLabels.push(element.Cycle)
-          this.cycleData[0].data.push(0)
-          lastIndex = this.cycleData[0].data.length - 1
-        }
+      // console.log(data);
+      
+      // data.forEach(element => {
 
-        this.cycleData[0].data[cycleIndex != -1 ? cycleIndex : lastIndex] += +element.Montant
+        // let cycleIndex = this.cycleLabels.indexOf(element.Cycle)
+        // if(cycleIndex == -1) {
+        //   this.cycleLabels.push(element.Cycle)
+        //   this.cycleData[0].data.push(0)
+        //   lastIndex = this.cycleData[0].data.length - 1
+        // }
+
+        // this.cycleData[0].data[cycleIndex != -1 ? cycleIndex : lastIndex] += +element.Montant
 
         
-        let typeIndex = this.modeLabels.indexOf(element.PaiementMode)
-        if(typeIndex == -1) {
-          this.modeLabels.push(element.PaiementMode)
-          this.modeData[0].data.push(0)
-          lastIndex = this.modeData[0].data.length - 1
-        }
+        // let typeIndex = this.modeLabels.indexOf(element.PaiementMode)
+        // if(typeIndex == -1) {
+        //   this.modeLabels.push(element.PaiementMode)
+        //   this.modeData[0].data.push(0)
+        //   lastIndex = this.modeData[0].data.length - 1
+        // }
 
-        this.modeData[0].data[typeIndex != -1 ? typeIndex : lastIndex] += +element.Montant
+        // this.modeData[0].data[typeIndex != -1 ? typeIndex : lastIndex] += +element.Montant
 
 
                 
-        let serviceIndex = this.serviceLabels.indexOf(element.Service)
-        if(serviceIndex == -1) {
-          this.serviceLabels.push(element.Service)
-          this.serviceData[0].data.push(0)
-          lastIndex = this.serviceData[0].data.length - 1
-        }
+        // let serviceIndex = this.serviceLabels.indexOf(element.Service)
+        // if(serviceIndex == -1) {
+        //   this.serviceLabels.push(element.Service)
+        //   this.serviceData[0].data.push(0)
+        //   lastIndex = this.serviceData[0].data.length - 1
+        // }
 
-        this.serviceData[0].data[serviceIndex != -1 ? serviceIndex : lastIndex] += +element.Montant
+        // this.serviceData[0].data[serviceIndex != -1 ? serviceIndex : lastIndex] += +element.Montant
 
-      });
+      // });
     })
 
 
@@ -289,8 +298,9 @@ export class FinanceMoisDashPage implements OnInit {
 
       let total = 0
       let list = []
-
-      const data = response.sort((a,b) => b.Montant - a.Montant);
+      console.log(response);
+      
+      const data = response.sort((a,b) =>  b.totalImpaye - a.totalImpaye );
       data.forEach(element => {
         console.log(element);
 
@@ -326,8 +336,9 @@ export class FinanceMoisDashPage implements OnInit {
       });
       
       
-      this.retardsList = list.length != 0 ? list.slice(0,10) : []
-
+      this.retardsList = list.length != 0 ? list.slice(0,30) : []
+      console.log(this.retardsList.length);
+      
       // this.itemsEncaissement.push(
       //   {
       //     alias:"élèves",

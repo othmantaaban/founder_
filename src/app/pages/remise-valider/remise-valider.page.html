@@ -1,7 +1,7 @@
 <ion-content [fullscreen]="true">
   <div class="header">
     <ion-toolbar mode="md">
-      <a (click)="navigateTo('/tabs/finance-jour-dash')">
+      <a (click)="navigateTo('/tabs/finance-dash')">
         <ion-icon name="chevron-back-outline"></ion-icon>
         <span>Retour</span>
       </a>
@@ -39,14 +39,15 @@
             <div class="content">
               <div class="frais">
                 <div class="fromTo">
-                  <div class="from">1400,00</div>
+                  <div class="from"> {{ request.old_price }}</div>
                   <ion-icon name="chevron-forward-outline"></ion-icon>
                   <div class="to">
-                    {{request.old_price}}
+                    {{request.new_price}}
                   </div>
                 </div>
                 <div class="total">
-                  {{request.new_price}}
+                  <!-- {{request.new_price}} -->
+                  {{request.discount_amount}}
                 </div>
               </div>
               <div class="faite">

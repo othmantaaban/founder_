@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { UsageDashPageRoutingModule } from './usage-dash-routing.module';
 
 import { UsageDashPage } from './usage-dash.page';
+import { DateSegmentsComponentModule } from 'src/app/components/date-segments/date-segment.component.module';
 // import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
 
 @NgModule({
@@ -14,7 +15,8 @@ import { UsageDashPage } from './usage-dash.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    UsageDashPageRoutingModule
+    UsageDashPageRoutingModule,
+    DateSegmentsComponentModule
   ],
   declarations: [
     UsageDashPage,

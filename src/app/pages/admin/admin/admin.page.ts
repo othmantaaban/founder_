@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
@@ -9,10 +10,13 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./admin.page.scss'],
 })
 export class AdminPage implements OnInit {
+  @ViewChild("datasegment") datesegment : DateSegmentsComponent
+
+
   public  pathList=[
     {vue:'Jour',path:'/tabs/admin',value:'jour'},
     {vue:'Mois',path:'/tabs/admin',value:'mois'},
-    {vue:'Annee',path:'/tabs/admin',value:'annee'}
+    // {vue:'Annee',path:'/tabs/admin',value:'annee'}
   ];
 
   active 
@@ -47,5 +51,11 @@ export class AdminPage implements OnInit {
 
   ngOnInit() {
   }
+
+  ionViewWillLeave() {
+    
+    this.datesegment.ngOnDestroy()
+  }
+
 
 }

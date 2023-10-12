@@ -18,16 +18,19 @@ export class FinanceDashPage implements OnInit {
   // @ViewChild("jour") jourRef: any;
   // @ViewChild("mois") moisRef: any;
   // @ViewChild("annes") anneeRef: any;
+  @ViewChild('datesegment') datesegment : DateSegmentsComponent;
+
   public pathList=[
     {vue:'Jour', path:'/tabs/admin-jour-dash',value:'jour'},
     {vue:'Mois', path:'/tabs/admin-mois-dash',value:'mois'},
-    {vue:'Annee',path:'/tabs/admin-annee-dash',value:'annee'}
+    // {vue:'Annee',path:'/tabs/admin-annee-dash',value:'annee'}
   ];
 
   public active : string = "jour";
 
 // : ComponentRef
   constructor(
+    // private segmentCmp : DateSegmentsComponent, 
     private sharedService: SharedService,
     private navigation : NavController,
     private route : Router
@@ -65,6 +68,10 @@ export class FinanceDashPage implements OnInit {
     // this.jourRef.callApi();
   }
 
+  ionViewWillLeave() {
+    // this.segmentCmp.ngOnDestroy()
+    this.datesegment.ngOnDestroy()
+  }
 
   
 

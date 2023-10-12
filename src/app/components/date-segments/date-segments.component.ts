@@ -22,7 +22,7 @@ export class DateSegmentsComponent implements OnInit {
   @Input() listPaths:any[];
   public static dateValue:any;
   
-  public selectedValue:string = "mois";
+  @Input() selectedValue:string = "mois";
   public selectedDate:string;
 
   @Input() defaultValue:string;
@@ -51,12 +51,21 @@ export class DateSegmentsComponent implements OnInit {
     if(this.selected<this.itemsList.length-1){
       // this.selectedIndex=GlobalConstantesComponent.dateValue
       this.selected+=1
+      console.log(this.selected);
+      console.log(this.itemsList);
+      
+      
       // DateSegmentsComponent.dateValue=this.itemsList[this.selectedIndex].anglais
       // GlobalConstantesComponent.dateValue=this.itemsList[this.selectedIndex].
       // GlobalConstantesComponent.dateValue=this.selectedIndex
       // this.selectedDate=this.itemsList[GlobalConstantesComponent.dateValue].francais
       DateSegmentsComponent.dateValue=this.itemsList[this.selected].anglais
       // GlobalConstantesComponent.dateValue=this.selectedIndex
+    } else if (this.selectedValue == "mois") {
+      this.selected = 0
+      console.log(this.selected);
+
+      DateSegmentsComponent.dateValue=this.itemsList[this.selected].anglais
     }
    this.sharedService.sendClickEvent({value : this.selectedValue, selectedDate: this.selectedDate});
   }
@@ -72,8 +81,13 @@ export class DateSegmentsComponent implements OnInit {
       DateSegmentsComponent.dateValue=this.itemsList[this.selected].anglais
     // this.itemsList[this.selectedIndex].anglais
 
+    } else if (this.selectedValue == "mois") {
+      this.selected = this.itemsList.length - 1
+      console.log(this.selected);
+      DateSegmentsComponent.dateValue=this.itemsList[this.selected].anglais
     }
-   this.sharedService.sendClickEvent({value : this.selectedValue, selectedDate: this.selectedDate});
+    
+    this.sharedService.sendClickEvent({value : this.selectedValue, selectedDate: this.selectedDate});
   }
 
   groupArrayOfObjects = (list, key) => {
@@ -152,13 +166,20 @@ export class DateSegmentsComponent implements OnInit {
     
     // this.selectedValue = this.router.getCurrentNavigation().finalUrl.toString().split("/").pop()
     this.selectedValue = "mois"
+    console.log(this.selectedValue);
+    
     
     this.initialize();
   }
 
+  ngOnDestroy() {
+    this.selectedValue = "mois"
+    console.log(this.selectedValue);
+    
+  }
+
   initialize() {
-    // this.selectedValue = "jour"
-    // this.seg.value = "jour"
+    // this.seg.value = "jour"f
     const c = new Date();
     let prior = new Date().setDate(c.getDate() - 30);
     let k=30
