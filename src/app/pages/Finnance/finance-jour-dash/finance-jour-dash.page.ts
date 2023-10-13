@@ -153,6 +153,8 @@ export class FinanceJourDashPage implements OnInit {
     { data: [], label: '', backgroundColor: ["#2B2A64", "#F7643B", "#EE386E", "#C4013B"] },
   ];
 
+  depenses : any = [];
+
 
   public done1 = false;
   public done2 = false;
@@ -452,6 +454,12 @@ export class FinanceJourDashPage implements OnInit {
       console.log(elt);
       this.remise = elt.requests
       this.remise_count = elt.total
+    })
+
+    this.api.get({period: date}, "get_depenses_jour")
+    .subscribe(response => {
+      this.depenses = response
+      
     })
 
 

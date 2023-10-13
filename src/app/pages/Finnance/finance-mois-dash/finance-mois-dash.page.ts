@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { element } from 'protractor';
 import { Subscription } from 'rxjs';
 import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
 import { FinanceService } from 'src/app/finance.service';
+import { ApiService } from 'src/app/services/api/api.service';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
@@ -11,8 +13,7 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class FinanceMoisDashPage implements OnInit {
 
-
-  public retardsTotal={montant:0,count:0}
+    public retardsTotal={montant:0,count:0}
     //Repartition encaissement cycle
     public cycleLabels = [];
     public cycleData = [
@@ -67,12 +68,8 @@ export class FinanceMoisDashPage implements OnInit {
   public itemsDepenses=[
     {alias:"Factures",title:"Dépenses Aujourd'hui",montant:"109",count:"53"},
   ]
-  public depensesList=[
-    {libelle:"depense1",nfacteur:"facteur1",prestataire:"prestataire1",montant:"15000"},
-    {libelle:"depense2",nfacteur:"facteur1",prestataire:"prestataire2",montant:"20000"},
-    {libelle:"depense3",nfacteur:"facteur1",prestataire:"prestataire3",montant:"13000"},
-    {libelle:"depense4",nfacteur:"facteur1",prestataire:"prestataire4",montant:"25000"},
-  ]
+  public depenses: any =[]
+
   pathList=[
     {vue:"Jour",path:"/tabs/finance-jour-dash",value:"jour"},
     {vue:"Mois",path:"/tabs/finance-mois-dash",value:"mois"},
@@ -123,7 +120,9 @@ export class FinanceMoisDashPage implements OnInit {
 
   clickEventSubscription:Subscription;
   constructor(
-    private financeService : FinanceService,private cdr: ChangeDetectorRef,private sharedService:SharedService
+    private financeService : FinanceService,private cdr: ChangeDetectorRef,private sharedService:SharedService, 
+    private api : ApiService
+
   ) {
     this.clickEventSubscription= this.sharedService.getClickEvent().subscribe((elt)=>{
       console.log();
@@ -218,6 +217,16 @@ export class FinanceMoisDashPage implements OnInit {
 
     }) 
     
+    this.cycleLabels = []
+    this.cycleData = []
+
+          
+    this.modeLabels = []
+    this.modeData = []
+
+    
+    this.serviceLabels = []
+    this.serviceData = []
     this.financeService.getEncaissementMoisList(date)
     .subscribe(response => {
       console.log(response);
@@ -230,14 +239,13 @@ export class FinanceMoisDashPage implements OnInit {
       this.cycleData = response.cycle[1]
 
             
-      this.modeData[0].data = response.paiement[1]
       this.modeLabels = response.paiement[0]
+      this.modeData = response.paiement[1] 
 
-      console.log(response.cycle[1]);
-      console.log(response.paiement[1]);
+      console.log(response);
       
-      this.serviceData[0].data = []
-      this.serviceLabels = []
+      this.serviceLabels = response.service[0]
+      this.serviceData = response.service[1]
       
             
 
@@ -299,8 +307,10 @@ export class FinanceMoisDashPage implements OnInit {
       let total = 0
       let list = []
       console.log(response);
-      
-      const data = response.sort((a,b) =>  b.totalImpaye - a.totalImpaye );
+      let data = response
+      // const data = response.sort((a,b) =>  b.totalImpaye - a.totalImpaye );
+
+
       data.forEach(element => {
         console.log(element);
 
@@ -335,9 +345,10 @@ export class FinanceMoisDashPage implements OnInit {
 
       });
       
+      list = list.sort((a,b) =>  b.montant - a.montant );
       
       this.retardsList = list.length != 0 ? list.slice(0,30) : []
-      console.log(this.retardsList.length);
+      // console.log(this.retardsList.length);
       
       // this.itemsEncaissement.push(
       //   {
@@ -347,6 +358,12 @@ export class FinanceMoisDashPage implements OnInit {
       //     count: this.retardsList.length,
       //     unite:"MAD"
       //   })  
+    })
+
+    this.api.get({period: date}, "get_depenses_mois")
+    .subscribe(response => {
+      this.depenses = response
+      
     })
 
   }
@@ -367,4 +384,31 @@ export class FinanceMoisDashPage implements OnInit {
   
   }
 
+  getRetardData() {
+    let element = []
+    for (let index = 0; index < this.cycleLabels.length; index++) {
+      element.push(this.caCycleData[0].data[index] - this.cycleData[0].data[index])  
+    }
+    return  [
+      {
+        data: element, 
+        label: '',
+        backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
+    ];
+  }
+  getRetardService() {
+    let elt = this.serviceLabels.length > this.caServiceLabels.length ? this.caServiceLabels.length: this.serviceLabels.length
+    let element = []
+    
+    for (let index = 0; index < this.cycleLabels.length; index++) {
+      element.push(this.caServiceData[0].data[index] - this.serviceData[0].data[index])  
+    }
+    return  [
+      {
+        data: element, 
+        label: '',
+        backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
+    ];
+
+  }
 }
