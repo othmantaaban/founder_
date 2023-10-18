@@ -1,7 +1,7 @@
 <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;"><span style="font-size: 0.9em ;">{{Title}}</span></h6>
   <cdk-virtual-scroll-viewport *ngIf="items.length!=0 as value; else blank" itemSize="300" minBufferPx="900" maxBufferPx="1350" style="height: 300px;">
   <ion-row style="margin: 19px;" *ngFor="let item of items;">
-  <ion-col size="5">{{item.eleve}}</ion-col>
+  <ion-col size="5">{{item.Eleve}} <span class="badge">{{ item.Classe }}</span></ion-col>
   <ion-col size="2">
     <span style="margin-left: 10px;">
       <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -9,7 +9,7 @@
         </svg>
     </span>
   </ion-col>
-  <ion-col style="text-align: right;" size="5"> <span style="font-size: 22px;font-weight:600;">{{item.montant}}</span> MAD</ion-col>
+  <ion-col style="text-align: right;" size="5"> <span style="font-size: 22px;font-weight:600;">{{item.totalImpaye}}</span> MAD</ion-col>
   </ion-row>
 </cdk-virtual-scroll-viewport>
 

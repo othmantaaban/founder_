@@ -17,7 +17,7 @@
 </ng-template> -->
 
 <div
-  *ngIf="barChartData[0].data.length != 0 as value; else blank"
+  *ngIf="barChartData[0]?.data?.length != 0 as value; else blank"
   style="display: block"
   style="width: 300px; margin: auto"
 >

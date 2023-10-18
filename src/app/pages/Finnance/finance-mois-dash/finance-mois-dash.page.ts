@@ -176,44 +176,26 @@ export class FinanceMoisDashPage implements OnInit {
 
     })
 
+    this.caServiceData = [];
+    this.caServiceLabels = [];
+    this.caCycleData = [];
+    this.caCycleLabels = [];
+
     this.financeService.getCAList(date)
     .subscribe(response => {
-      const data=response.result
+      // const data=response.result
+      console.log(response);
+      
       // Cycle prep
       let lastIndex = 0 
 
 
-      this.caServiceData[0].data = [];
-      this.caServiceLabels = [];
+      this.caServiceData = response.service.data;
+      this.caServiceLabels = response.service.labels;
 
-      this.caCycleData[0].data = [];
-      this.caCycleLabels = [];
+      this.caCycleData = response.cycle.data;
+      this.caCycleLabels = response.cycle.labels;
 
-      data.forEach(element => {
-        let cycleIndex = this.caCycleLabels.indexOf(element.Cycle)
-
-        if(cycleIndex == -1) {
-          this.caCycleLabels.push(element.Cycle)
-          this.caCycleData[0].data.push(0) 
-          lastIndex = this.caCycleData[0].data.length - 1 
-        }
-
-        this.caCycleData[0].data[cycleIndex != -1 ? cycleIndex : lastIndex] += +element.Montant 
-
-        // 
-        let serviceIndex = this.caServiceLabels.indexOf(element.Service)
-        
-        if(serviceIndex == -1) {
-          this.caServiceLabels.push(element.Service)
-          this.caServiceData[0].data.push(0) 
-          lastIndex = this.caServiceData[0].data.length - 1 
-        }
-
-        this.caServiceData[0].data[serviceIndex != -1 ? serviceIndex : lastIndex] += +element.Montant 
-
-
-
-      });
 
     }) 
     
@@ -296,58 +278,56 @@ export class FinanceMoisDashPage implements OnInit {
 
       let lastIndex = 0
 
-      this.cycleRetData[0].data = []
-      this.cycleRetLabels = []
+      this.cycleRetData = response.cycle.data
+      this.cycleRetLabels = response.cycle.labels
       
-      this.niveauRetData[0].data = []
-      this.niveauRetLabels = []
+      this.serviceRetData = response.service.data
+      this.serviceRetLabels = response.service.labels
 
-      this.retardsList = []
+      this.retardsList = response.list
 
-      let total = 0
-      let list = []
-      console.log(response);
-      let data = response
+
+      // console.log(response);
       // const data = response.sort((a,b) =>  b.totalImpaye - a.totalImpaye );
 
 
-      data.forEach(element => {
-        console.log(element);
+      // data.forEach(element => {
+      //   // console.log(element);
 
-        let cycleIndex =  this.cycleRetLabels.indexOf(element.Cycle)
+      //   let cycleIndex =  this.cycleRetLabels.indexOf(element.Cycle)
 
-        if(cycleIndex == -1) {
-          this.cycleRetLabels.push(element.Cycle)
-          this.cycleRetData[0].data.push(0)
-          lastIndex = this.cycleRetData[0].data.length - 1
-        }
+      //   if(cycleIndex == -1) {
+      //     this.cycleRetLabels.push(element.Cycle)
+      //     this.cycleRetData[0].data.push(0)
+      //     lastIndex = this.cycleRetData[0].data.length - 1
+      //   }
 
-        this.cycleRetData[0].data[cycleIndex ? cycleIndex : lastIndex] += +element.totalImpaye
+      //   this.cycleRetData[0].data[cycleIndex ? cycleIndex : lastIndex] += +element.totalImpaye
         
-        let niveauIndex =  this.niveauRetLabels.indexOf(element.Niveau)
+      //   let niveauIndex =  this.niveauRetLabels.indexOf(element.Niveau)
 
-        if(niveauIndex == -1) {
-          this.niveauRetLabels.push(element.Niveau)
-          this.niveauRetData[0].data.push(0)
-          lastIndex = this.niveauRetData[0].data.length - 1
-        }
+      //   if(niveauIndex == -1) {
+      //     this.niveauRetLabels.push(element.Niveau)
+      //     this.niveauRetData[0].data.push(0)
+      //     lastIndex = this.niveauRetData[0].data.length - 1
+      //   }
 
-        this.niveauRetData[0].data[niveauIndex ? niveauIndex : lastIndex] += +element.totalImpaye
+      //   this.niveauRetData[0].data[niveauIndex ? niveauIndex : lastIndex] += +element.totalImpaye
 
         
-        list.push(
-          { 
-            eleve: element.Eleve,
-            montant: element.totalImpaye
-          })
+      //   list.push(
+      //     { 
+      //       eleve: element.Eleve,
+      //       montant: element.totalImpaye
+      //     })
 
-        total += +element.totalImpaye
+      //   total += +element.totalImpaye
 
-      });
+      // });
       
-      list = list.sort((a,b) =>  b.montant - a.montant );
+      // list = list.sort((a,b) =>  b.montant - a.montant );
       
-      this.retardsList = list.length != 0 ? list.slice(0,30) : []
+      // this.retardsList = list.length != 0 ? list.slice(0,30) : []
       // console.log(this.retardsList.length);
       
       // this.itemsEncaissement.push(
@@ -385,27 +365,27 @@ export class FinanceMoisDashPage implements OnInit {
   }
 
   getRetardData() {
-    let element = []
-    for (let index = 0; index < this.cycleLabels.length; index++) {
-      element.push(this.caCycleData[0].data[index] - this.cycleData[0].data[index])  
-    }
+    // let element = []
+    // for (let index = 0; index < this.cycleLabels.length; index++) {
+    //   element.push(this.caCycleData[0].data[index] - this.cycleData[0].data[index])  
+    // }
     return  [
       {
-        data: element, 
+        data: [], 
         label: '',
         backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
     ];
   }
   getRetardService() {
-    let elt = this.serviceLabels.length > this.caServiceLabels.length ? this.caServiceLabels.length: this.serviceLabels.length
-    let element = []
+    // let elt = this.serviceLabels.length > this.caServiceLabels.length ? this.caServiceLabels.length: this.serviceLabels.length
+    // let element = []
     
-    for (let index = 0; index < this.cycleLabels.length; index++) {
-      element.push(this.caServiceData[0].data[index] - this.serviceData[0].data[index])  
-    }
+    // for (let index = 0; index < this.cycleLabels.length; index++) {
+    //   element.push(this.caServiceData[0].data[index] - this.serviceData[0].data[index])  
+    // }
     return  [
       {
-        data: element, 
+        data: [], 
         label: '',
         backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
     ];

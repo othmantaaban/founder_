@@ -67,16 +67,16 @@
           <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ret-cycle-mois" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Cycle</button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ret-niveau-mois" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Niveau</button>
+          <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ret-niveau-mois" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Service</button>
         </li>
 
       </ul>
       <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="ret-cycle-mois" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
-          <app-horizontal-bar-chart [barChartLabels]="cycleLabels" [barChartData]="getRetardData()" [barChartLegend]="false"></app-horizontal-bar-chart>
+          <app-horizontal-bar-chart [barChartLabels]="cycleRetLabels" [barChartData]="cycleRetData" [barChartLegend]="false"></app-horizontal-bar-chart>
         </div>
         <div class="tab-pane fade" id="ret-niveau-mois" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
-          <app-horizontal-bar-chart [barChartLabels]="serviceLabels" [barChartData]="getRetardService()" [barChartLegend]="false"></app-horizontal-bar-chart>
+          <app-horizontal-bar-chart [barChartLabels]="serviceRetLabels" [barChartData]="serviceRetData" [barChartLegend]="false"></app-horizontal-bar-chart>
         </div>
       </div>
     </ion-card>
@@ -87,7 +87,9 @@
     </ion-card>
       
 
-    
+
+
+    <!-- --------------------------------------------- -->
     <ion-card *ngIf="depenses?.prestataire?.visible || depenses?.category?.visible" style="padding:0;padding-top: 5px;padding-bottom: 5px;margin: 15px;margin-bottom:30px;width: 85%;" class="text-center card-custom mx-auto">
       <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
         <span style="font-size: 0.9em ;">
@@ -95,23 +97,37 @@
         </span>
       </h6>
       <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist" style="border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
-        <li class="nav-item"  *ngIf="depenses?.category?.visible" role="presentation">
+        <li class="nav-item" *ngIf="depenses?.category?.visible" role="presentation">
           <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ret-cycle-mois" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
             {{depenses?.category?.title}}
           </button>
         </li>
         <li class="nav-item" *ngIf="depenses?.prestataire?.visible" role="presentation">
-          <button class="nav-link"  id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ret-niveau-mois" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+          <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ret-niveau-mois" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
             {{depenses?.prestataire?.title}}
           </button>
         </li>
 
       </ul>
       <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="ret-cycle-mois" role="tabpanel" *ngIf="depenses?.category?.visible" aria-labelledby="pills-home-tab" tabindex="0">
+        <div 
+          *ngIf="depenses?.category?.visible"  
+          class="tab-pane fade show active" 
+          id="ret-cycle-mois" 
+          role="tabpanel" 
+          aria-labelledby="pills-home-tab" 
+          tabindex="0"
+        >
           <app-horizontal-bar-chart [barChartLabels]="depenses?.category[0]" [barChartData]="depenses?.category[1]" [barChartLegend]="false"></app-horizontal-bar-chart>
         </div>
-        <div class="tab-pane fade" id="ret-niveau-mois" *ngIf="depenses?.prestataire?.visible" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+        <div 
+          *ngIf="depenses?.prestataire?.visible" 
+          class="tab-pane fade" 
+          id="ret-niveau-mois" 
+          role="tabpanel" 
+          aria-labelledby="pills-home-tab" 
+          tabindex="0"
+        >
           <app-horizontal-bar-chart [barChartLabels]="depenses?.prestataire[0]" [barChartData]="depenses?.prestataire[1]" [barChartLegend]="false"></app-horizontal-bar-chart>
         </div>
       </div>
