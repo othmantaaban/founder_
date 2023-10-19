@@ -19,6 +19,15 @@ export class FinanceJourDashPage implements OnInit {
   @ViewChild('slides') slides;
   public loaders = [false, false, false, false, false, false, false]
 
+  depenses = []
+  depensesCategLabels = []
+  depensesCategData = []
+
+  depensesPrestataireLabels = []
+  depensesPrestataireData = []
+
+  listDepenses = []
+
   public itemsEncaissement = [];
 
   public annulationsList = [];
@@ -153,7 +162,7 @@ export class FinanceJourDashPage implements OnInit {
     { data: [], label: '', backgroundColor: ["#2B2A64", "#F7643B", "#EE386E", "#C4013B"] },
   ];
 
-  depenses : any = [];
+  // depenses : any = [];
 
 
   public done1 = false;
@@ -234,85 +243,24 @@ export class FinanceJourDashPage implements OnInit {
     })
     
     // Donut Chart Prep(Encaissement)
-    this.financeService.getEncaissementList(date)
+
+    this.api.get({period: date, type: "jour"}, "get_encaissements_data")
     .subscribe(response => {
-      
-      const data = response.result
+      this.encCycleLabels = response?.cycle[0]
+      this.encCycleData = response?.cycle[1]
 
-      this.encCycleData[0]["data"] = []
-      this.encCycleLabels = []
             
-      this.encTypeData[0]["data"] = []
-      this.encTypeLabels = []
-                  
-      this.encServiceData[0]["data"] = []
-      this.encServiceLabels = []
-                        
-      this.encSiteData[0]["data"] = []
-      this.encSiteLabels = []
+      this.encTypeLabels = response?.paiement[0]
+      this.encTypeData = response?.paiement[1] 
 
-      
+      this.encServiceLabels = response?.service[0]
+      this.encServiceData = response?.service[1]
 
+      // this.loader_obj.encaiss = true
 
-      data.forEach(element => {
-        let lastIndex = 0
-        
-        // encaissment Par cycle 
-
-        let cycleIndex = this.encCycleLabels.indexOf(element.Cycle)
-        if(cycleIndex == -1) {
-          this.encCycleLabels.push(element.Cycle)
-          this.encCycleData[0]["data"].push(0)  
-          lastIndex = this.encCycleData[0]["data"].length - 1
-        }
-        
-        this.encCycleData[0]["data"][cycleIndex != -1 ? cycleIndex : lastIndex] += +element.Montant
-
-        // encaissment Par cycle 
-
-        // encaissment Par type 
-
-        let modeIndex = this.encTypeLabels.indexOf(element.PaiementMode)
-        if(modeIndex == -1) {
-          this.encTypeLabels.push(element.PaiementMode)
-          this.encTypeData[0]["data"].push(0)  
-          lastIndex = this.encTypeData[0]["data"].length - 1
-        }
-        
-        this.encTypeData[0]["data"][modeIndex != -1 ? modeIndex : lastIndex] += +element.Montant
-
-        // encaissment Par type 
-
-        // encaissment Par service 
-
-
-        let serviceIndex = this.encServiceLabels.indexOf(element.Service)
-        if(serviceIndex == -1) {
-          this.encServiceLabels.push(element.Service)
-          this.encServiceData[0]["data"].push(0)  
-          lastIndex = this.encServiceData[0]["data"].length - 1
-        }
-        
-        this.encServiceData[0]["data"][serviceIndex != -1 ? serviceIndex : lastIndex] += +element.Montant
-
-        // encaissment Par service 
-
-        // encaissment Par service 
-        
-        // let siteIndex = this.encSiteLabels.indexOf(element?.Site)
-        // if(siteIndex == -1) {
-        //   this.encSiteLabels.push(element.Site)
-        //   this.encSiteData[0]["data"].push(0)  
-        //   lastIndex = this.encSiteData[0]["data"].length - 1
-        // }
-        
-        // this.encSiteData[0]["data"][siteIndex != -1 ? siteIndex : lastIndex] += +element.Montant
-
-      });
-
-      done2 = true
-
+      // this.loader_dissmis()
     })
+
 
     this.financeService.getRecouvrementsList(date)
     .subscribe(response => {
@@ -456,10 +404,19 @@ export class FinanceJourDashPage implements OnInit {
       this.remise_count = elt.total
     })
 
-    this.api.get({period: date}, "get_depenses_jour")
+    this.api.get({period: date, type: "jour"}, "get_depenses_data")
     .subscribe(response => {
       this.depenses = response
-      
+      this.depensesCategLabels = response.category.labels
+      this.depensesCategData = response.category.data
+
+      this.depensesPrestataireLabels = response.prestataire.labels
+      this.depensesPrestataireData = response.prestataire.data
+
+      this.listDepenses = response.listDepense.list
+
+      // this.loader_obj.depense = true
+      // this.loader_dissmis()
     })
 
 

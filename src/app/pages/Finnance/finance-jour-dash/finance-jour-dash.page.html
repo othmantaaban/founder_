@@ -190,47 +190,97 @@
       style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
       <app-listing-finance-avoirs [items]="avoirsList" [Title]="'Avoirs générés'"></app-listing-finance-avoirs>
     </ion-card>
-<!-- 
-    <ion-card class="mx-auto"
-      style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
-    </ion-card> -->
-    <!-- <app-listing-discount [items]="discountsList" [Title]="'Remises Accordées'"></app-listing-discount> -->
-
 
     <ion-card class="mx-auto"
       style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
       <app-listing-finance [items]="annulationsList" [Title]="'Paiements Annulés'"></app-listing-finance>
     </ion-card>
 
+    <ion-card *ngIf="depenses?.prestataire?.visible || depenses?.category?.visible" style="padding:0;padding-top: 5px;padding-bottom: 5px;margin: 15px;margin-bottom:30px;width: 85%;" class="text-center card-custom mx-auto">
+      <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
+        <span style="font-size: 0.9em ;">
+          {{ depenses?.title }}
+        </span>
+      </h6>
+      <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist" style="border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
+        <li class="nav-item" *ngIf="depenses?.category?.visible" role="presentation">
+          <button 
+          class="nav-link active" 
+          id="pills-depense_cycle-tab" 
+          data-bs-toggle="pill" 
+          data-bs-target="#depense_cycle" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+            {{depenses?.category?.title}}
+          </button>
+        </li>
+        <li class="nav-item" *ngIf="depenses?.prestataire?.visible" role="presentation">
+          <button 
+            class="nav-link" 
+            id="pills-prestataire-tab" 
+            data-bs-toggle="pill" 
+            data-bs-target="#prestataire" 
+            type="button" 
+            role="tab" 
+            aria-controls="pills-home" 
+            aria-selected="true"
+          >
+            {{depenses?.prestataire?.title}}
+          </button>
+        </li>
 
-    <!-- <app-cards-finance [items]="itemsAnnulations"></app-cards-finance> -->
+      </ul>
+      <div class="tab-content" id="pills-tabContent">
+        <div 
+          *ngIf="depenses?.category?.visible"  
+          class="tab-pane fade show active" 
+          id="depense_cycle" 
+          role="tabpanel" 
+          aria-labelledby="pills-depense_cycle-tab" 
+          tabindex="0"
+        >
+          <app-horizontal-bar-chart [barChartLabels]="depensesCategLabels" [barChartData]="depensesCategData" [barChartLegend]="false"></app-horizontal-bar-chart>
+        </div>
+        <div 
+          *ngIf="depenses?.prestataire?.visible" 
+          class="tab-pane fade" 
+          id="prestataire"
+          role="tabpanel" 
+          aria-labelledby="pills-prestataire-tab" 
+          tabindex="0"
+        >
+          <app-horizontal-bar-chart [barChartLabels]="depensesPrestataireLabels" [barChartData]="depensesPrestataireData" [barChartLegend]="false"></app-horizontal-bar-chart>
+        </div>
+      </div>
+    </ion-card>
 
-
-    <!-- <app-donut-chart [doughnutChartLabels]="depCategorieLabels" [doughnutChartData]="depCategorieData"></app-donut-chart> -->
-    <!-- <ion-slides style="margin-bottom: 10px;" pager="true" [options]="slideOpts">
-      <ion-slide>
-        <ion-card style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
-          <h6 style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;"><span
-              style="font-size: 0.9em ;">Dépenses par Catégorie</span></h6>
-          <app-horizontal-bar-chart [barChartLabels]="depCategorieLabels" [barChartData]="depCategorieData"
-            [barChartLegend]="false"></app-horizontal-bar-chart>
-        </ion-card>
-      </ion-slide>
-
-    </ion-slides> -->
-
-
-    <!-- <div style="width: 90%;margin:auto">
-      <app-listing-finance [items]="annulationsList" [Title]="'Avoirs'"></app-listing-finance>
-    </div>  -->
-    <!-- <ion-card class="mx-auto"
-      style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;">
-      <app-listing-finance-depense [items]="depensesLst" [Title]="'Dépenses du jour'"></app-listing-finance-depense>
-    </ion-card> -->
-
-          
-    <ion-card *ngIf="depenses?.listDepense?.visible" class="mx-auto" style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;" >
+    <!--  -->
+    <ion-card *ngIf="depenses?.listDepense?.visible"  class="mx-auto" style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;" >
       <!-- <app-listing-finance [items]="retardsList" [Title]="'Top 30 Retards'"></app-listing-finance> -->
+      <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
+        <span style="font-size: 0.9em ;">
+          {{ depenses?.listDepense?.title }}
+        </span>
+      </h6>
+
+      <ng-container  *ngIf="listDepenses.length else listDepense"
+      >
+        <div class="listing-depense">
+          <div class="item" *ngFor="let item of listDepenses">
+            <div class="name">{{ item?.Label }}</div>
+            <div class="date">{{ item?.date }}</div>
+            <div class="total">{{ item?.total }}</div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #listDepense>
+        <div class="text-center" style="margin:20px">
+          <!-- <img src="https://cdn-icons-png.flaticon.com/128/7486/7486767.png" alt="" width=""> -->
+          <img src="assets/no_data.png" alt="" width="">
+          <h6 class="text-center text-muted" style="font-size:0.8em">Aucune donnée</h6>
+        </div>
+      </ng-template>
+    </ion-card>
+          
+    <!-- <ion-card *ngIf="depenses?.listDepense?.visible" class="mx-auto" style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;" >
       <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
         <span style="font-size: 0.9em ;">
           {{ depenses?.listDepense?.title }}
@@ -249,30 +299,17 @@
         </div>
         <ng-template #listDepense>
           <div class="text-center" style="margin:20px">
-            <!-- <img src="https://cdn-icons-png.flaticon.com/128/7486/7486767.png" alt="" width=""> -->
             <img src="assets/no_data.png" alt="" width="">
             <h6 class="text-center text-muted" style="font-size:0.8em">Aucune donnée</h6>
           </div>
         </ng-template>
       </div>
-    </ion-card>
+    </ion-card> -->
       
 
 
 
 
-
-
-    <!-- <app-donut-chart></app-donut-chart> -->
-    <!-- <app-listing-finance [items]="annulationsList" [Title]="'Annulations'"></app-listing-finance> -->
-    <!-- <app-pie-chart></app-pie-chart>
-      <app-horizontal-bar-chart></app-horizontal-bar-chart> -->
-
-    <!-- <ion-card style="padding-top: 0px;padding-bottom: 10px;margin: auto;margin-bottom:30px;width: 90%;" class="card-custom"> -->
-    <!-- <app-listing-administration [items]="absentsList" Title="Absents aujourd'hui"></app-listing-administration> -->
-    <!-- </ion-card> -->
-
-    <!-- <app-tab-solution></app-tab-solution> -->
 
   </div>
 </ion-content>

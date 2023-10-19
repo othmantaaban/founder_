@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 import { element } from 'protractor';
 import { Subscription } from 'rxjs';
 import { DateSegmentsComponent } from 'src/app/components/date-segments/date-segments.component';
@@ -12,6 +13,15 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./finance-mois-dash.page.scss'],
 })
 export class FinanceMoisDashPage implements OnInit {
+
+  loader_obj = {
+    card_infos : false,
+    ca_prevu : false,
+    encaiss : false,
+    retard : false,
+    depense : false,
+  }
+
 
     public retardsTotal={montant:0,count:0}
     //Repartition encaissement cycle
@@ -61,6 +71,14 @@ export class FinanceMoisDashPage implements OnInit {
     public typeData = [
       {data: [65, 59, 80, 81], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
     ];
+
+  public depensesCategLabels = []
+  public depensesCategData = []
+    
+  public depensesPrestataireLabels = []
+  public depensesPrestataireData = []
+    
+  public listDepenses = []
     
   public itemsEncaissement=[]
 
@@ -68,7 +86,7 @@ export class FinanceMoisDashPage implements OnInit {
   public itemsDepenses=[
     {alias:"Factures",title:"Dépenses Aujourd'hui",montant:"109",count:"53"},
   ]
-  public depenses: any =[]
+  // public depenses: any =[]
 
   pathList=[
     {vue:"Jour",path:"/tabs/finance-jour-dash",value:"jour"},
@@ -118,10 +136,13 @@ export class FinanceMoisDashPage implements OnInit {
     {User:"Hamza Jerrari",Role:"Réunion pédagogique"},
   ]
 
+  depenses : any = [];
+
   clickEventSubscription:Subscription;
   constructor(
     private financeService : FinanceService,private cdr: ChangeDetectorRef,private sharedService:SharedService, 
-    private api : ApiService
+    private api : ApiService,
+    private loadingController : LoadingController
 
   ) {
     this.clickEventSubscription= this.sharedService.getClickEvent().subscribe((elt)=>{
@@ -148,20 +169,17 @@ export class FinanceMoisDashPage implements OnInit {
 
   // getRetardsMoisList : etat_impayes_parents
 
-  callApi(){ 
+  async callApi(){ 
+    this.loader()
     this.itemsEncaissement=[]
-    console.log(DateSegmentsComponent.dateValue)
   
     let date = DateSegmentsComponent.dateValue !== undefined ? DateSegmentsComponent.dateValue : new Date().getMonth() + 1;
-    console.log("date mois");
 
+    this.itemsEncaissement = []
     this.financeService.getEncaissementCardsList(JSON.stringify({date: date, type: "mois"}))
     .subscribe(response => {
-      console.log(response);
       
-      this.itemsEncaissement = []
       response.forEach(element => {
-        // if (element.result[0].Montant) {
           let item = {
             title: element.title,
             montant: element.result.montant,
@@ -170,9 +188,11 @@ export class FinanceMoisDashPage implements OnInit {
             count: element.result.countEleves
           }
           this.itemsEncaissement.push(item)
-        // }
       });
-      const data = response
+
+      this.loader_obj.card_infos = true;
+
+      this.loader_dissmis()
 
     })
 
@@ -183,12 +203,6 @@ export class FinanceMoisDashPage implements OnInit {
 
     this.financeService.getCAList(date)
     .subscribe(response => {
-      // const data=response.result
-      console.log(response);
-      
-      // Cycle prep
-      let lastIndex = 0 
-
 
       this.caServiceData = response.service.data;
       this.caServiceLabels = response.service.labels;
@@ -196,7 +210,8 @@ export class FinanceMoisDashPage implements OnInit {
       this.caCycleData = response.cycle.data;
       this.caCycleLabels = response.cycle.labels;
 
-
+      this.loader_obj.ca_prevu = true
+      this.loader_dissmis()
     }) 
     
     this.cycleLabels = []
@@ -209,74 +224,53 @@ export class FinanceMoisDashPage implements OnInit {
     
     this.serviceLabels = []
     this.serviceData = []
-    this.financeService.getEncaissementMoisList(date)
+
+    // this.financeService.getEncaissementMoisList(date)
+    // .subscribe(response => {
+      
+    //   this.cycleLabels = response?.cycle[0]
+    //   this.cycleData = response?.cycle[1]
+
+            
+    //   this.modeLabels = response?.paiement[0]
+    //   this.modeData = response?.paiement[1] 
+
+    //   this.serviceLabels = response?.service[0]
+    //   this.serviceData = response?.service[1]
+
+    //   this.loader_obj.encaiss = true
+
+    //   this.loader_dissmis()
+    // })
+
+
+    this.api.get({period: date, type: "mois"}, "get_encaissements_data")
     .subscribe(response => {
-      console.log(response);
-      
-      // const data = response.result
-      let lastIndex = 0
-      // console.log(data);
-      
-      this.cycleLabels = response.cycle[0]
-      this.cycleData = response.cycle[1]
+      this.cycleLabels = response?.cycle[0]
+      this.cycleData = response?.cycle[1]
 
             
-      this.modeLabels = response.paiement[0]
-      this.modeData = response.paiement[1] 
+      this.modeLabels = response?.paiement[0]
+      this.modeData = response?.paiement[1] 
 
-      console.log(response);
-      
-      this.serviceLabels = response.service[0]
-      this.serviceData = response.service[1]
-      
-            
+      this.serviceLabels = response?.service[0]
+      this.serviceData = response?.service[1]
 
-      // console.log(data);
-      
-      // data.forEach(element => {
+      this.loader_obj.encaiss = true
 
-        // let cycleIndex = this.cycleLabels.indexOf(element.Cycle)
-        // if(cycleIndex == -1) {
-        //   this.cycleLabels.push(element.Cycle)
-        //   this.cycleData[0].data.push(0)
-        //   lastIndex = this.cycleData[0].data.length - 1
-        // }
-
-        // this.cycleData[0].data[cycleIndex != -1 ? cycleIndex : lastIndex] += +element.Montant
-
-        
-        // let typeIndex = this.modeLabels.indexOf(element.PaiementMode)
-        // if(typeIndex == -1) {
-        //   this.modeLabels.push(element.PaiementMode)
-        //   this.modeData[0].data.push(0)
-        //   lastIndex = this.modeData[0].data.length - 1
-        // }
-
-        // this.modeData[0].data[typeIndex != -1 ? typeIndex : lastIndex] += +element.Montant
-
-
-                
-        // let serviceIndex = this.serviceLabels.indexOf(element.Service)
-        // if(serviceIndex == -1) {
-        //   this.serviceLabels.push(element.Service)
-        //   this.serviceData[0].data.push(0)
-        //   lastIndex = this.serviceData[0].data.length - 1
-        // }
-
-        // this.serviceData[0].data[serviceIndex != -1 ? serviceIndex : lastIndex] += +element.Montant
-
-      // });
+      this.loader_dissmis()
     })
 
+    this.cycleRetData = []
+    this.cycleRetLabels = []
+    
+    this.serviceRetData = []
+    this.serviceRetLabels = []
 
-
-        // Cards Prep
+    this.retardsList = []
 
     this.financeService.getRetardsMoisList(date)
     .subscribe(response=>{
-      // const data = response
-
-      let lastIndex = 0
 
       this.cycleRetData = response.cycle.data
       this.cycleRetLabels = response.cycle.labels
@@ -286,65 +280,37 @@ export class FinanceMoisDashPage implements OnInit {
 
       this.retardsList = response.list
 
+      this.loader_obj.retard = true
 
-      // console.log(response);
-      // const data = response.sort((a,b) =>  b.totalImpaye - a.totalImpaye );
-
-
-      // data.forEach(element => {
-      //   // console.log(element);
-
-      //   let cycleIndex =  this.cycleRetLabels.indexOf(element.Cycle)
-
-      //   if(cycleIndex == -1) {
-      //     this.cycleRetLabels.push(element.Cycle)
-      //     this.cycleRetData[0].data.push(0)
-      //     lastIndex = this.cycleRetData[0].data.length - 1
-      //   }
-
-      //   this.cycleRetData[0].data[cycleIndex ? cycleIndex : lastIndex] += +element.totalImpaye
-        
-      //   let niveauIndex =  this.niveauRetLabels.indexOf(element.Niveau)
-
-      //   if(niveauIndex == -1) {
-      //     this.niveauRetLabels.push(element.Niveau)
-      //     this.niveauRetData[0].data.push(0)
-      //     lastIndex = this.niveauRetData[0].data.length - 1
-      //   }
-
-      //   this.niveauRetData[0].data[niveauIndex ? niveauIndex : lastIndex] += +element.totalImpaye
-
-        
-      //   list.push(
-      //     { 
-      //       eleve: element.Eleve,
-      //       montant: element.totalImpaye
-      //     })
-
-      //   total += +element.totalImpaye
-
-      // });
-      
-      // list = list.sort((a,b) =>  b.montant - a.montant );
-      
-      // this.retardsList = list.length != 0 ? list.slice(0,30) : []
-      // console.log(this.retardsList.length);
-      
-      // this.itemsEncaissement.push(
-      //   {
-      //     alias:"élèves",
-      //     title:"Retards des paiements",
-      //     montant:this.numFormatter(total),
-      //     count: this.retardsList.length,
-      //     unite:"MAD"
-      //   })  
+      this.loader_dissmis()
     })
 
-    this.api.get({period: date}, "get_depenses_mois")
+    this.depenses = []
+    this.depensesCategLabels = [];
+    this.depensesCategData = [];
+
+    this.depensesPrestataireLabels = [];
+    this.depensesPrestataireData = [];
+
+    this.listDepenses = [];
+
+    this.api.get({period: date, type: "mois"}, "get_depenses_data")
     .subscribe(response => {
       this.depenses = response
-      
+      this.depensesCategLabels = response.category.labels
+      this.depensesCategData = response.category.data
+
+      this.depensesPrestataireLabels = response.prestataire.labels
+      this.depensesPrestataireData = response.prestataire.data
+
+      this.listDepenses = response.listDepense.list
+
+      this.loader_obj.depense = true
+      this.loader_dissmis()
     })
+
+
+    
 
   }
 
@@ -358,37 +324,45 @@ export class FinanceMoisDashPage implements OnInit {
 
   ngOnInit() {
 
-    // this.clickEventSubscription= this.sharedService.getClickEvent().subscribe(()=>{
-    //   this.callApi();
-    // })
   
   }
 
-  getRetardData() {
-    // let element = []
-    // for (let index = 0; index < this.cycleLabels.length; index++) {
-    //   element.push(this.caCycleData[0].data[index] - this.cycleData[0].data[index])  
-    // }
-    return  [
-      {
-        data: [], 
-        label: '',
-        backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
-  }
-  getRetardService() {
-    // let elt = this.serviceLabels.length > this.caServiceLabels.length ? this.caServiceLabels.length: this.serviceLabels.length
-    // let element = []
+
+  async loader_dissmis() {
+    console.log(this.loader_obj);
     
-    // for (let index = 0; index < this.cycleLabels.length; index++) {
-    //   element.push(this.caServiceData[0].data[index] - this.serviceData[0].data[index])  
-    // }
-    return  [
-      {
-        data: [], 
-        label: '',
-        backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
+    if(
+      this.loader_obj.ca_prevu == true && 
+      this.loader_obj.retard == true && 
+      this.loader_obj.encaiss == true && 
+      this.loader_obj.depense == true && 
+      this.loader_obj.card_infos == true
+    ) {
+      const loading = await this.loadingController.getTop();
+      console.log("cwfcewfwe");
+      
+      await loading.dismiss()
+    }
+  }
+
+  async loader() {
+    this.loader_obj = {
+      card_infos : false,
+      ca_prevu : false,
+      encaiss : false,
+      retard : false,
+      depense : false,
+    }
+  
+  
+    const loading = await this.loadingController.create({
+      spinner: null,
+      message: '<h3>Loading Data, Please wait...</h3>',
+      translucent: true,
+      cssClass: 'custom-class custom-loading'
+    });
+
+    await loading.present();
 
   }
 }
