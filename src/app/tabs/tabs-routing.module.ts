@@ -80,7 +80,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/finance-dash/jour',
+        redirectTo: 'finance-dash',
         pathMatch: 'full'
       },
       {
