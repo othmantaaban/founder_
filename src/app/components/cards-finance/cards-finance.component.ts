@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class CardsFinanceComponent implements OnInit {
   
 
-  @Input() items:[];
+  @Input() items:any;
   @Input() loader:boolean;
   slideOpts = {
     initialSlide: 0,

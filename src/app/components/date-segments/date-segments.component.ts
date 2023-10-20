@@ -210,7 +210,9 @@ export class DateSegmentsComponent implements OnInit {
     const months = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     const monthsDict = {10:9, 9:10, 8:11, 7:12, 6:1, 5:2, 4:3, 3:4, 2:5, 1:6, 0:7};
     // const mois = ["Septembre", "Octobre", "Novembre", "Decembre","Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août"];
+    
     const mois = ["Octobre", "Novembre", "Decembre","Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre"];
+    // const mois = ["Octobre", "Novembre", "Decembre","Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Septembre"];
     let currentMonth : number = new Date().getMonth() + 1
     
     // const indexOfMonth : boolean = months.indexOf((elt: any) => { return +elt === +currentMonth})

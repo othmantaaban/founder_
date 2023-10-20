@@ -9,6 +9,7 @@ export class ListingRecouvrementsComponent implements OnInit {
 
 
   @Input() items=[];
+  @Input() tabs=["Eléve", "Action", "Date Action"];
   @Input() Title:string;
   constructor() { }
 
