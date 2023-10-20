@@ -20,58 +20,103 @@ export class FinanceMoisDashPage implements OnInit {
     encaiss : false,
     retard : false,
     depense : false,
+    bar_ca_encaiss: false
   }
 
+  // bar ca encaiss variables
 
-    public retardsTotal={montant:0,count:0}
-    //Repartition encaissement cycle
-    public cycleLabels = [];
-    public cycleData = [
-      {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
-    public serviceLabels = [];
-    public serviceData = [
-      {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
-    // CA
-    public caCycleLabels = [];
-    public caCycleData = [
-      {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
-    public caServiceLabels = [];
-    public caServiceData = [
-      {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
-    
+  public barChartData1 = [
+    {
+      data: [], 
+      label: 'CA',
+      backgroundColor:"#EE386E",
+      type:"bar"
+    },
+    {
+      data: [], 
+      label: 'Encaissements',
+      backgroundColor:"#2B2A64",
+      type:"bar"
+    },
+  ];
 
-    public modeLabels = [];
-    public modeData = [
-      {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
+  public barChartLabels1 = []
 
-    //Repartition retards cycle
-    public cycleRetLabels = [];
-    public cycleRetData = [
-      {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
+  public barChartType1 = 'line';
 
-    //Repartition retards cycle
-    public niveauRetLabels = [];
-    public niveauRetData = [
-      {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
+  public barChartData2 = [
+    {
+      data: [], 
+      label: 'CA',
+      backgroundColor:"#EE386E",
+      type:"bar"
+    },
+    {
+      data: [], 
+      label: 'Encaissements',
+      backgroundColor:"#2B2A64",
+      type:"bar"
+    },
+  ];
 
-    //Repartition retards service
-    public serviceRetLabels = [];
-    public serviceRetData = [
-      {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
+  public barChartLabels2 = []
 
-    public typeLabels = ['Transport', 'Cantine', 'F.I', 'F.S'];
-    public typeData = [
-      {data: [65, 59, 80, 81], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
-    ];
+  public barChartType2 = 'line';
 
+  public bar_title1 = ""
+  public bar_title2 = ""
+
+  // bar ca encaiss variables
+
+  // CA prevus variable
+  public cs_prevus : any = []
+  public caCycleLabels = [];
+  public caCycleData = [
+    {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
+  ];
+  public caServiceLabels = [];
+  public caServiceData = [
+    {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
+  ];
+
+  // CA prevus variable
+
+
+  // encaissements variables
+  public encaiss : any= []
+  public cycleLabels = [];
+  public cycleData = [
+    {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
+  ];
+  public serviceLabels = [];
+  public serviceData = [
+    {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
+  ]
+  
+  public modeLabels = [];
+  public modeData = [
+    {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
+  ];
+
+  // encaissements variables
+
+  // retard variables
+  public retards : any = []
+  public cycleRetLabels = [];
+  public cycleRetData = [
+    {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
+  ];
+
+  public serviceRetLabels = [];
+  public serviceRetData = [
+    {data: [], label: '',backgroundColor:["#2B2A64", "#F7643B", "#EE386E","#C4013B"]},
+  ];
+
+  public retardsList=[]
+
+  // retard variables
+
+  // depense variables
   public depensesCategLabels = []
   public depensesCategData = []
     
@@ -79,66 +124,19 @@ export class FinanceMoisDashPage implements OnInit {
   public depensesPrestataireData = []
     
   public listDepenses = []
-    
-  public itemsEncaissement=[]
-
-  public retardsList=[]
-  public itemsDepenses=[
-    {alias:"Factures",title:"Dépenses Aujourd'hui",montant:"109",count:"53"},
-  ]
-  // public depenses: any =[]
-
-  pathList=[
-    {vue:"Jour",path:"/tabs/finance-jour-dash",value:"jour"},
-    {vue:"Mois",path:"/tabs/finance-mois-dash",value:"mois"},
-    {vue:"Annee",path:"/tabs/finance-annee-dash",value:"annee"}
-  ]
-
-  slideOpts = {
-    initialSlide: 0,
-    speed: 400,
-    // loop: true,
-    centeredSlides: true,
-    // spaceBetween: 20,
-    // autoplay: true
-  };
-   
-  
-  //BarChart
-  public barChartOptions = {
-    scaleShowVerticalLines: true,
-    responsive: true,
-    indexAxis: 'x',
-    scales: {
-      x: {
-        grid: {
-          display: false
-        }
-      },
-      y: {
-        grid: {
-          display: false
-        }
-      }
-    }
-  };
-  public barChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-  public barChartType = 'bar';
-  public barChartLegend = true;
-  public barChartData = [
-    {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A',backgroundColor:"#F7643B"},
-    {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B',backgroundColor:"#2B2A64"}
-  ];
-
-  public absentsList=[
-    {User:"Amir Yassine",Role:"Réclamation"},
-    {User:"Reda Youssfi",Role:"Réunion pédagogique"},
-    {User:"Hamza Jerrari",Role:"Réunion pédagogique"},
-  ]
 
   depenses : any = [];
 
+  // depense variables
+
+
+
+    
+  public itemsEncaissement=[]
+
+
   clickEventSubscription:Subscription;
+
   constructor(
     private financeService : FinanceService,private cdr: ChangeDetectorRef,private sharedService:SharedService, 
     private api : ApiService,
@@ -146,7 +144,6 @@ export class FinanceMoisDashPage implements OnInit {
 
   ) {
     this.clickEventSubscription= this.sharedService.getClickEvent().subscribe((elt)=>{
-      console.log();
       if (elt.value == "mois") {
         this.callApi();
       }
@@ -200,15 +197,18 @@ export class FinanceMoisDashPage implements OnInit {
     this.caServiceLabels = [];
     this.caCycleData = [];
     this.caCycleLabels = [];
+    this.cs_prevus= []
 
     this.financeService.getCAList(date)
     .subscribe(response => {
+      this.cs_prevus = response
 
       this.caServiceData = response.service.data;
       this.caServiceLabels = response.service.labels;
 
       this.caCycleData = response.cycle.data;
       this.caCycleLabels = response.cycle.labels;
+
 
       this.loader_obj.ca_prevu = true
       this.loader_dissmis()
@@ -225,36 +225,20 @@ export class FinanceMoisDashPage implements OnInit {
     this.serviceLabels = []
     this.serviceData = []
 
-    // this.financeService.getEncaissementMoisList(date)
-    // .subscribe(response => {
-      
-    //   this.cycleLabels = response?.cycle[0]
-    //   this.cycleData = response?.cycle[1]
-
-            
-    //   this.modeLabels = response?.paiement[0]
-    //   this.modeData = response?.paiement[1] 
-
-    //   this.serviceLabels = response?.service[0]
-    //   this.serviceData = response?.service[1]
-
-    //   this.loader_obj.encaiss = true
-
-    //   this.loader_dissmis()
-    // })
-
+    this.encaiss = []
 
     this.api.get({period: date, type: "mois"}, "get_encaissements_data")
     .subscribe(response => {
-      this.cycleLabels = response?.cycle[0]
-      this.cycleData = response?.cycle[1]
+      this.encaiss = response
+      this.cycleLabels = response?.cycle?.labels
+      this.cycleData = response?.cycle?.data
 
             
-      this.modeLabels = response?.paiement[0]
-      this.modeData = response?.paiement[1] 
+      this.modeLabels = response?.paiement?.labels
+      this.modeData = response?.paiement?.data 
 
-      this.serviceLabels = response?.service[0]
-      this.serviceData = response?.service[1]
+      this.serviceLabels = response?.service?.labels
+      this.serviceData = response?.service?.data
 
       this.loader_obj.encaiss = true
 
@@ -269,8 +253,12 @@ export class FinanceMoisDashPage implements OnInit {
 
     this.retardsList = []
 
+    this.retards = []
+
     this.financeService.getRetardsMoisList(date)
     .subscribe(response=>{
+
+      this.retards = response
 
       this.cycleRetData = response.cycle.data
       this.cycleRetLabels = response.cycle.labels
@@ -278,7 +266,7 @@ export class FinanceMoisDashPage implements OnInit {
       this.serviceRetData = response.service.data
       this.serviceRetLabels = response.service.labels
 
-      this.retardsList = response.list
+      this.retardsList = response.list.data
 
       this.loader_obj.retard = true
 
@@ -310,21 +298,30 @@ export class FinanceMoisDashPage implements OnInit {
     })
 
 
+    this.api.get({period: date}, "bar_ca_encaissement")
+    .subscribe(elt => {
+      this.barChartData1 = elt?.data1
+      this.barChartLabels1 = elt?.labels
+
+      this.barChartData2 = elt?.data2
+      this.barChartLabels2 = elt?.labels
+
+
+      this.bar_title1 = elt.title1
+      this.bar_title2 = elt.title1
+
+      this.loader_obj.bar_ca_encaiss = true
+      this.loader_dissmis()
+    })
+
     
 
   }
 
    // Group By Function
-  groupArrayOfObjects = (list, key) => {
-    return list.reduce(function (rv, x) {
-      (rv[x[key]] = rv[x[key]] || []).push(x);
-      return rv;
-    }, {});
-  };
 
-  ngOnInit() {
 
-  
+  ngOnInit() {  
   }
 
 
@@ -336,7 +333,8 @@ export class FinanceMoisDashPage implements OnInit {
       this.loader_obj.retard == true && 
       this.loader_obj.encaiss == true && 
       this.loader_obj.depense == true && 
-      this.loader_obj.card_infos == true
+      this.loader_obj.card_infos == true &&
+      this.loader_obj.bar_ca_encaiss == true
     ) {
       const loading = await this.loadingController.getTop();
       console.log("cwfcewfwe");
@@ -352,17 +350,20 @@ export class FinanceMoisDashPage implements OnInit {
       encaiss : false,
       retard : false,
       depense : false,
+      bar_ca_encaiss: false
     }
+    const top = await this.loadingController.getTop()
+    console.log(top)
+    if(top == undefined) {
+      const loading = await this.loadingController.create({
+        spinner: null,
+        message: '<h3>Loading Data, Please wait...</h3>',
+        translucent: true,
+        cssClass: 'custom-class custom-loading'
+      });
   
-  
-    const loading = await this.loadingController.create({
-      spinner: null,
-      message: '<h3>Loading Data, Please wait...</h3>',
-      translucent: true,
-      cssClass: 'custom-class custom-loading'
-    });
-
-    await loading.present();
+      await loading.present();
+    }
 
   }
 }

@@ -14,6 +14,8 @@ export class FinanceAnneeDashPage implements OnInit {
 
   ionViewWillEnter() {
     this.callApi()
+
+    console.log(this.barChartData1)
   }
 
 

@@ -14,30 +14,53 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./finance-jour-dash.page.scss'],
 })
 export class FinanceJourDashPage implements OnInit {
-  public remise = []
-  public remise_count = 0
+
   @ViewChild('slides') slides;
-  public loaders = [false, false, false, false, false, false, false]
 
-  depenses = []
-  depensesCategLabels = []
-  depensesCategData = []
+  public loader_obj = {
+    card_infos : false,
+    encaiss: false,
+    recouvrement: false,
+    annulations: false,
+    avoirs: false,
+    remise: false,
+    depense: false
+  }
+  depenses: any = []
+  depensesCategLabels: any = []
+  depensesCategData: any = []
 
-  depensesPrestataireLabels = []
-  depensesPrestataireData = []
+  depensesPrestataireLabels: any = []
+  depensesPrestataireData: any = []
 
-  listDepenses = []
+  listDepenses: any = []
 
   public itemsEncaissement = [];
 
-  public annulationsList = [];
   public itemsAnnulations = [];
   public depensesLst = [];
   public itemsDepenses = [];
   public discountsList = [];
   public depensesList = [];
-  public avoirsList = [];
+
+  // recouvrement variables
   public recouvrementsList = [];
+  public recouvrementsTitles : any = [];
+  // recouvrement variables
+  
+  // avoirs variables
+  
+  public avoirsList = [];
+  public avoirsTitles : any = []
+  
+  // avoirs variables
+  
+  // annulations variables
+
+  public annulationsList = [];
+  public annulationsTitles = ""
+
+  // annulations variables
 
 
   public absentsList = [];
@@ -51,7 +74,7 @@ export class FinanceJourDashPage implements OnInit {
   pathList = [
     { vue: 'Jour', path: '/tabs/finance-jour-dash', value: 'jour' },
     { vue: 'Mois', path: '/tabs/finance-mois-dash', value: 'mois' },
-    { vue: 'Annee', path:'/tabs/finance-annee-dash', value:'annee'}
+    // { vue: 'Annee', path:'/tabs/finance-annee-dash', value:'annee'}
   ];
 
 
@@ -85,46 +108,14 @@ export class FinanceJourDashPage implements OnInit {
     this.callApi()
   }
 
-  //Encaissement
+  // remise variables
+  public remise = []
+  public remise_count = 0
+  public remise_titles : any = []
+  // remise variables
 
-  // public encCycleLabels: string[] = [];
-  // public encCycleData: ChartData<'pie'> = {
-  //   labels:[],
-  //   datasets: [
-  //       {
-  //           data: [],
-  //           backgroundColor: ["#2B2A64", "#F7643B", "#EE386E","#C4013B"],
-  //           hoverBackgroundColor: ["#2B2A64", "#F7643B", "#EE386E","#C4013B"],
-  //           hoverBorderColor: ["grey"]
-  //         }
-  //       ]
-  //     };
-
-  //  public encTypeLabels: string[] = [];
-  //  public encTypeData: ChartData<'pie'> = {
-  //          labels: [],
-  //          datasets: [
-  //              {
-  //                  data: [],
-  //                  backgroundColor: ["#2B2A64", "#F7643B", "#EE386E","#C4013B"],
-  //                  hoverBackgroundColor: ["#2B2A64", "#F7643B", "#EE386E","#C4013B"],
-  //                  hoverBorderColor: ["grey"]
-  //                }
-  //              ]
-  //            };
-  //  public encServiceLabels: string[] = ['Transport', 'F.Inscriptions', 'F.A','Cantine'];
-  //  public encServiceLabels: string[] = [];
-  //  public encServiceData: ChartData<'pie'> = {
-  //         labels: [],
-  //          datasets: [
-  //                   {
-  //                     data: [],
-  //                     backgroundColor: ["#2B2A64", "#F7643B", "#EE386E","#C4013B"],
-  //                     hoverBackgroundColor: ["#2B2A64", "#F7643B", "#EE386E","#C4013B"],
-  //                     hoverBorderColor: ["grey"]
-  //                     }
-  //                        ]
-  //                      };
+  // encaissement variables
+  public encaiss : any = []
 
   public encCycleLabels = [];
   public encCycleData = [
@@ -140,6 +131,11 @@ export class FinanceJourDashPage implements OnInit {
   public encServiceData = [
     { data: [], label: '', backgroundColor: ["#2B2A64", "#F7643B", "#EE386E", "#C4013B"] },
   ];
+
+  // encaissement variables
+
+
+
   public depCategorieLabels = [];
   public depCategorieData = [
     { data: [], label: '', backgroundColor: ["#2B2A64", "#F7643B", "#EE386E", "#C4013B"] },
@@ -161,17 +157,7 @@ export class FinanceJourDashPage implements OnInit {
   public encSiteData = [
     { data: [], label: '', backgroundColor: ["#2B2A64", "#F7643B", "#EE386E", "#C4013B"] },
   ];
-
-  // depenses : any = [];
-
-
-  public done1 = false;
-  public done2 = false;
-  public done3 = false;
-  public done4 = false;
-  public done5 = false;
-  public done6 = false;
-  public done7 = false;
+;
 
   slideChanged() {
   }
@@ -190,7 +176,7 @@ export class FinanceJourDashPage implements OnInit {
       // this.callApi();
 
       if (elt.value == "jour") {
-        this.presentLoadingWithOptions()
+        this.callApi()
       }
     })
   }
@@ -200,6 +186,8 @@ export class FinanceJourDashPage implements OnInit {
   // getDepensesList: get_depenses
 
   callApi() {
+    this.loader()
+
     const formatedDate = () => {
       const currentDate = new Date();
       const year = currentDate.getFullYear();
@@ -211,14 +199,7 @@ export class FinanceJourDashPage implements OnInit {
 
     let date = DateSegmentsComponent.dateValue !== undefined ? DateSegmentsComponent.dateValue : formatedDate();
     console.log(date);
-    
-    let done1 = false;
-    let done2 = false;
-    let done3 = false;
-    let done4 = false;
-    let done5 = false;
-    let done6 = false;
-    let done7 = false;
+
 
         // Cards Prep
     this.financeService.getEncaissementCardsList(JSON.stringify({date: date, type: "jour"}))
@@ -238,170 +219,105 @@ export class FinanceJourDashPage implements OnInit {
         this.itemsEncaissement.push(item)
       });
 
-      done1 = true
-
+      this.loader_obj.card_infos = true
+      this.loader_dissmis()
     })
     
     // Donut Chart Prep(Encaissement)
 
+    this.encaiss = []
+
+    this.encCycleLabels = []
+    this.encCycleData = []
+
+          
+    this.encTypeLabels = []
+    this.encTypeData = [] 
+
+    this.encServiceLabels = []
+    this.encServiceData = []
+
     this.api.get({period: date, type: "jour"}, "get_encaissements_data")
     .subscribe(response => {
-      this.encCycleLabels = response?.cycle[0]
-      this.encCycleData = response?.cycle[1]
+      this.encaiss = response
+
+      this.encCycleLabels = response?.cycle?.labels
+      this.encCycleData = response?.cycle?.data
 
             
-      this.encTypeLabels = response?.paiement[0]
-      this.encTypeData = response?.paiement[1] 
+      this.encTypeLabels = response?.paiement?.labels
+      this.encTypeData = response?.paiement?.data 
 
-      this.encServiceLabels = response?.service[0]
-      this.encServiceData = response?.service[1]
+      this.encServiceLabels = response?.service?.labels
+      this.encServiceData = response?.service?.data
 
-      // this.loader_obj.encaiss = true
-
-      // this.loader_dissmis()
+      this.loader_obj.encaiss = true
+      this.loader_dissmis()
     })
 
-
+    
+    this.recouvrementsList = []
     this.financeService.getRecouvrementsList(date)
     .subscribe(response => {
-      this.recouvrementsList = []
+      this.recouvrementsList = response.list
+      this.recouvrementsTitles = response.titles;
 
-      const data = response.result
-      
-      data.forEach(
-        (d) => (
-        this.recouvrementsList.push({ 
-          Eleve: d.Eleve, 
-          Classe: d.Classe, 
-          Action: d.Action, 
-          DateAction: d.DateAction 
-        })
-      ));
-      done3 = true
+      this.loader_obj.recouvrement = true
+      this.loader_dissmis()
 
     })
 
-
-    // cards Prep(Depenses)
-    this.financeService.getDepensesList(date)
-    .subscribe(response => {
-      const data = response.result
-      console.log(data);
-      
-      const countDep = response.count
-      let depensesMontant = data.map((d) => (d.Montant));
-      let totalMontant = 0
-      depensesMontant.map(v => {
-        totalMontant += parseFloat(v)
-      })
-      this.itemsDepenses = []
-      this.itemsDepenses.push({ alias: "dépenses", title: "Dépenses du jour", montant: this.numFormatter(totalMontant), count: countDep })
-      // console.log("Depenses items here: ",this.itemsDepenses)
-      //-------//
-      // Cycle prep
-      let dataDepenses = data.map((d) => ({ UserBy: d.UserBy, Montant: d.Montant, Type: d.Rubrique }));
-      console.log("dpsList", dataDepenses)
-
-      this.depensesLst = []
-      dataDepenses.map((a) => {
-        this.depensesLst.push({ eleve: a.UserBy, montant: a.Montant, type: a.Type })
-      })
-
-      //-------//
-      // Cycle prep
-      let dataType = data.map((d) => ({ Type: d.Rubrique, Montant: d.Montant }));
-      const tmpTable = this.groupArrayOfObjects(
-        dataType,
-        "Type"
-      );
-      const dictType = [];
-      for (const [key1, value1] of Object.entries(tmpTable)) {
-        let total = 0
-        // console.log("here: ",Object.keys(value1))
-        Object.values(value1).map(v => { total += parseFloat(v.Montant) })
-        dictType.push({
-          Type: key1,
-          total: total,
-        });
-        total = 0
-      }
-      // console.log("here: ",dictService)
-      let tmpData = []
-      let tmpLabels = []
-      dictType.map((d) => {
-        tmpLabels.push(d.Type)
-        tmpData.push(d.total)
-      })
-      // this.depCategorieData.labels=tmpLabels
-      // this.depCategorieData.datasets[0]["data"]=tmpData
-      this.depCategorieLabels = tmpLabels
-      this.depCategorieData[0]["data"] = tmpData
-      console.log("here 2: ", this.depCategorieData)
-
-
-      done4 = true
-
-    })
 
     // Listing Annulation:
     // "2022-08-02"
+    this.annulationsList = []
     this.financeService.getEncaissementAnnulationsList(date)
     .subscribe(response => {
-      this.annulationsList = []
-      const data = response.result
-      // Cycle prep
-      let dataAnnulations = data.map((d) => ({ User: d.Eleve, Montant: d.Montant }));
-
-      // dataAnnulations.map((a) => {
-      //   this.annulationsList.push({ eleve: a.User, montant: a.Montant })
-      // })
-      this.annulationsList = [...dataAnnulations]
+      this.annulationsList = response.list 
+      this.annulationsTitles = response.titles 
 
       // console.log("Annulation items here: ",this.annulationsList)
-
-      done5 = true
-
+      this.loader_obj.annulations = true;
+      this.loader_dissmis()
     })
 
 
-    this.financeService.getDiscountsList(date)
-    .subscribe(response => {
-      this.discountsList = []
+    // this.financeService.getDiscountsList(date)
+    // .subscribe(response => {
+    //   this.discountsList = []
 
-      const data = response.result
-      // Cycle prep
-      let dataDiscounts = data.map((d) => ({ Eleve: d.Eleve, Service: d.Service, DiscountAmountTotal: d.DiscountAmountTotal, DiscountAmount: d.DiscountAmount, nbMois: d.nbMois }));
+    //   const data = response.result
+    //   // Cycle prep
+    //   let dataDiscounts = data.map((d) => ({ Eleve: d.Eleve, Service: d.Service, DiscountAmountTotal: d.DiscountAmountTotal, DiscountAmount: d.DiscountAmount, nbMois: d.nbMois }));
 
-      // dataDiscounts.map((d) => {
-      //   this.discountsList.push({ Eleve: d.Eleve, Service: d.Service, DiscountAmount: d.DiscountAmount, DiscountAmountTotal: d.DiscountAmountTotal })
-      // })
-      this.discountsList = [...dataDiscounts]
+    //   // dataDiscounts.map((d) => {
+    //   //   this.discountsList.push({ Eleve: d.Eleve, Service: d.Service, DiscountAmount: d.DiscountAmount, DiscountAmountTotal: d.DiscountAmountTotal })
+    //   // })
+    //   this.discountsList = [...dataDiscounts]
 
-      done6 = true
+    //   done6 = true
 
-    })
+    // })
 
 
+    this.avoirsList = []
     this.financeService.getAvoirsList(date)
     .subscribe(response => {
-      this.avoirsList = []
 
-      const data = response.result
-      let dataAvoirs = data.map((d) => ({ Eleve: d.Eleve, Amount: d.Amount, ConsumedAmount: d.ConsumedAmount, UserBy: d.UserBy }));
-      this.avoirsList = [...dataAvoirs]
-      // dataAvoirs.map((d) => {
-      //   this.avoirsList.push({ Eleve: d.Eleve, Amount: d.Amount, ConsumedAmount: d.ConsumedAmount, UserBy: d.UserBy })
-      // })
+      this.avoirsList = response.list
+      this.avoirsTitles = response.Titles
 
-      done7 = true
-
+      this.loader_obj.avoirs = true
+      this.loader_dissmis()
     })
-    // let d = "2022-08-24"
-    this.api.get({"period":date},"remises_jour")
+    // let d = "2023-08-26"
+    this.api.get({"period": date},"remises_jour")
     .subscribe(elt => {
-      console.log(elt);
       this.remise = elt.requests
       this.remise_count = elt.total
+      this.remise_titles = elt.titles
+      this.loader_obj.remise = true
+      this.loader_dissmis()
     })
 
     this.api.get({period: date, type: "jour"}, "get_depenses_data")
@@ -415,64 +331,9 @@ export class FinanceJourDashPage implements OnInit {
 
       this.listDepenses = response.listDepense.list
 
-      // this.loader_obj.depense = true
-      // this.loader_dissmis()
+      this.loader_obj.depense = true
+      this.loader_dissmis()
     })
-
-
-
-
-
-
-    // remises_jour
-
-
-    // Depenses
-    // this.financeService.getDepensesList(date).subscribe(response => {
-    //   const data=response.result
-    //   const countDep=response.count
-    //   let depensesMontant=data.map((d) => (d.Montant));
-    //   let totalMontant=0
-    //   depensesMontant.map(v =>{
-    //     totalMontant+=parseFloat(v)
-    //   })
-    //   this.itemsDepenses=[]
-    //   this.itemsDepenses.push({alias:"dépenses",title:"Dépenses du jour",montant:this.numFormatter(totalMontant),count:countDep})
-    //   //-------//
-    //   // Cycle prep
-    //   let dataDepenses=data.map((d) => ({UserBy:d.UserBy,Montant:d.Montant,Type:d.Type}));
-
-    //   dataDepenses.map((a)=>{
-    //     this.depensesLst.push({eleve:a.UserBy,montant:a.Montant,type:a.Type})
-    //   })
-    //   //-------//
-    //   // Cycle prep
-    //   let dataType=data.map((d) => ({Rubrique:d.Rubrique,Montant:d.Montant}));
-    //   const tmpTable = this.groupArrayOfObjects(
-    //     dataType,
-    //     "Rubrique"
-    //   );
-    //   const dictType = [];
-    //   for (const [key1, value1] of Object.entries(tmpTable)) {
-    //     let total=0
-    //     // console.log("here: ",Object.keys(value1))
-    //     Object.values(value1).map(v =>{total+=parseFloat(v.Montant)})
-    //     dictType.push({
-    //       Type: key1,
-    //       total: total,
-    //     });
-    //     total=0
-    //   }
-    //   let tmpData=[]
-    //   let tmpLabels=[]
-    //   dictType.map((d)=>{
-    //     tmpLabels.push(d.Type)
-    //     tmpData.push(d.total)
-    //   })
-    //   this.depCategorieData.labels=tmpLabels
-    //   this.depCategorieData.datasets[0]["data"]=tmpData
-
-    // })
   }
 
 
@@ -546,6 +407,50 @@ export class FinanceJourDashPage implements OnInit {
 
   navigateTo(link: string){
     this.navCtrl.navigateRoot([link]);
+  }
+
+  
+  async loader_dissmis() {
+    console.log(this.loader_obj);
+    
+    if(
+      this.loader_obj.card_infos  == true &&
+      this.loader_obj.encaiss == true &&
+      this.loader_obj.recouvrement == true &&
+      this.loader_obj.annulations == true &&
+      this.loader_obj.avoirs == true &&
+      this.loader_obj.remise == true &&
+      this.loader_obj.depense == true 
+    ) {
+      const loading = await this.loadingController.getTop();
+      console.log("cwfcewfwe");
+      
+      await loading.dismiss()
+    }
+  }
+
+  async loader() {
+    this.loader_obj = {
+      card_infos : false,
+      encaiss: false,
+      recouvrement: false,
+      annulations: false,
+      avoirs: false,
+      remise: false,
+      depense: false
+    }
+    const top = await this.loadingController.getTop()
+    if(top == undefined) {
+      const loading = await this.loadingController.create({
+        spinner: null,
+        message: '<h3>Loading Data, Please wait...</h3>',
+        translucent: true,
+        cssClass: 'custom-class custom-loading'
+      });
+  
+      await loading.present();
+    }
+
   }
 
 }

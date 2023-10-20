@@ -19,6 +19,7 @@ import { DateSegmentsComponent } from 'src/app/components/date-segments/date-seg
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientModule } from '@angular/common/http';
 import { HorizontalBarChartComponentModule } from 'src/app/components/horizontal-bar-chart/horizontal-bar-chart.component.module';
+import { ComboChartComponent } from 'src/app/components/combo-chart/combo-chart.component';
 
 @NgModule({
   imports: [
@@ -37,6 +38,8 @@ import { HorizontalBarChartComponentModule } from 'src/app/components/horizontal
     CardsFinanceComponent,
     ListingFinanceComponent,
     PieChartComponent,
+    ComboChartComponent,
+
     // HorizontalBarChartComponent,
     ListingAdministrationComponent,
     ListingFinanceDepenseComponent,

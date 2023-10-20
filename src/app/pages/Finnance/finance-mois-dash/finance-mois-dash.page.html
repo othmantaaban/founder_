@@ -9,14 +9,22 @@
     
     
    <ion-card style="padding:0;padding-top: 5px;padding-bottom: 5px;margin: 15px;margin-bottom:30px;width: 85%;" class="text-center card-custom mx-auto">
-      <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;"><span style="font-size: 0.9em ;">CA Prévisionnel</span></h6>
+      <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
+        <span style="font-size: 0.9em ;">
+          {{ cs_prevus?.title ? cs_prevus?.title : "CA Prévisionnel" }}
+        </span>
+      </h6>
       <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist" style="border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ca-cycle-mois" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Cycle</button>
+          <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ca-cycle-mois" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+            {{ cs_prevus?.cycle?.title ? cs_prevus?.cycle?.title : "cycle" }}
+          </button>
         </li>
        
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#ca-service-mois" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Service</button>
+          <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#ca-service-mois" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">
+            {{ cs_prevus?.service?.title ? cs_prevus?.service?.title : "service" }}
+          </button>
         </li>
       </ul>
       <div class="tab-content" id="pills-tabContent">
@@ -33,18 +41,24 @@
     <ion-card style="padding:0;padding-top: 5px;padding-bottom: 5px;margin: 15px;margin-bottom:30px;width: 85%;" class="text-center card-custom mx-auto">
       <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
         <span style="font-size: 0.9em ;">
-          Encaissements
+          {{ encaiss?.title ?  encaiss?.title: "Encaissements" }}
         </span>
       </h6>
       <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist" style="border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#enc-cycle-mois" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Cycle</button>
+          <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#enc-cycle-mois" type="button" role="tab" aria-controls="pills-home" aria-selected="true">
+            {{ encaiss?.cycle?.title ? encaiss?.cycle?.title : "cycle" }}
+          </button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#enc-type-mois" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Type</button>
+          <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#enc-type-mois" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">
+            {{ encaiss?.paiement?.title ? encaiss?.paiement?.title : "type" }}
+          </button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#enc-service-mois" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Service</button>
+          <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#enc-service-mois" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">
+            {{ encaiss?.service?.title ? encaiss?.service?.title : "service" }}
+          </button>
         </li>
       </ul>
       <div class="tab-content" id="pills-tabContent">
@@ -60,8 +74,17 @@
       </div>
     </ion-card> 
 
+    <app-combo-chart [barChartData]="barChartData1" [barChartType]="barChartType1" [barChartLabels]="barChartLabels1"  [Title]="bar_title1"></app-combo-chart> 
+
+    <app-combo-chart [barChartData]="barChartData2" [barChartType]="barChartType2" [barChartLabels]="barChartLabels2"  [Title]="bar_title2"></app-combo-chart> 
+
+
     <ion-card style="padding:0;padding-top: 5px;padding-bottom: 5px;margin: 15px;margin-bottom:30px;width: 85%;" class="text-center card-custom mx-auto">
-      <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;"><span style="font-size: 0.9em ;">Retards</span></h6>
+      <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
+        <span style="font-size: 0.9em ;">
+          {{ retards?.title ? retards?.title : "Retards" }}
+        </span>
+      </h6>
       <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist" style="border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
         <li class="nav-item" role="presentation">
           <button 
@@ -73,7 +96,9 @@
             role="tab" 
             aria-controls="pills-home" 
             aria-selected="true"
-            >Cycle</button>
+          >
+            {{ retards?.cycle?.title ? retards?.cycle?.title: "Cycle" }}
+          </button>
         </li>
         <li class="nav-item" role="presentation">
           <button 
@@ -85,7 +110,9 @@
           role="tab" 
           aria-controls="pills-home" 
           aria-selected="true"
-          >Service</button>
+          >
+          {{ retards?.service?.title ? retards?.service?.title: "Service" }}
+          </button>
         </li>
 
       </ul>
@@ -101,13 +128,13 @@
 
       
     <ion-card class="mx-auto" style="padding-top: 10px;padding-bottom: 10px;margin: 15px;margin-bottom:30px;width: 85%;" >
-      <app-listing-finance [items]="retardsList" [Title]="'Top 30 Retards'"></app-listing-finance>
+          <app-listing-finance [items]="retardsList" [Title]="retards?.list?.title ? retards?.list?.title: 'Service'" >
+          </app-listing-finance>
     </ion-card>
       
 
 
 
-    <!-- --------------------------------------------- -->
     <ion-card *ngIf="depenses?.prestataire?.visible || depenses?.category?.visible" style="padding:0;padding-top: 5px;padding-bottom: 5px;margin: 15px;margin-bottom:30px;width: 85%;" class="text-center card-custom mx-auto">
       <h6  style="text-align: center;font-weight:bold;border-bottom: 1px solid #E4E3E3;padding-bottom: 10px;">
         <span style="font-size: 0.9em ;">
